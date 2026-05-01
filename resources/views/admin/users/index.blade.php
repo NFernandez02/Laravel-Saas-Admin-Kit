@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <a href='/admin/users/create' class="btn btn-primary">Add New User</a>
+    <a href='{{ route('admin.users.create') }}' class="btn btn-primary">Add New User</a>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -17,10 +17,10 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->role->name }}</td>
                     <td>
-                        <a href='/admin/users/{{ $user->id }}/edit' class="btn btn-primary">Edit User</a>
+                        <a href='{{ route('admin.users.edit', $user) }}' class="btn btn-primary">Edit User</a>
                     </td>
                     <td>
-                        <form method="POST" action="/admin/users/{{ $user->id }}">
+                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}}}">
                             @csrf
                             @method('DELETE')
                             <button type="submit"class="btn btn-danger"> Delete User</button>

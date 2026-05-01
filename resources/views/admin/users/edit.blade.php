@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <form action="/admin/users/{{ $user->id }}" method="POST">
+    <form action="{{ route('admin.users.update', $user) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-3 mt-3">

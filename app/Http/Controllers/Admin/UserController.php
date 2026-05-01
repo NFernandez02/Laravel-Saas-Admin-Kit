@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -21,8 +22,8 @@ class UserController extends Controller
 
     public function store(Request $request){
         $fillables = $request->validate([
-            'name' => 'required',
-            'email' => ['required', 'email'],
+            'name' => ['required', 'max:100', 'string'],
+            'email' => ['required', 'email', Rule::unique('users, email')],
             'password' => 'required',
             'role' => 'required',
         ]);
@@ -51,8 +52,6 @@ class UserController extends Controller
             'name' => $fillables['name'],
             'role_id' => $fillables['role']
         ]);
-
-        $user->save();
 
         return redirect()->route('admin.users.index');
     }
