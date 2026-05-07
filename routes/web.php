@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
+use App\Models\AuditLog;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,7 +15,10 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     Route::get('/admin', function(){
         return view('admin.dashboard');
     });
-
+    
+    //AuditLog Controller
+    Route::get('/admin/logs', [AuditLogController::class, 'index'])->name('admin.logs');
+    
     //User Controller
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');

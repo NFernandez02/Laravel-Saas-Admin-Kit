@@ -3,7 +3,7 @@
         <!-- Links -->
         @auth
             <ul class="navbar-nav">
-                @if (auth()->guard()->user()?->role?->name === 'admin')
+                @if (auth()->user()?->role?->name === 'admin')
                     <li class="nav-item">
                         <a href='/admin' >Admin</a>
                     </li>
