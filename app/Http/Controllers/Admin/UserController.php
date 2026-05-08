@@ -6,14 +6,14 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\StoreUserRequest;
 use App\Http\Requests\Users\UpdateUserRequest;
-use App\Models\AuditLog;
 use App\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
+    public function __construct(private UserService $service){}
+
+
     public function index(){
         $users = User::with('role')->get();
         return view('admin.users.index', compact('users'));
@@ -24,22 +24,7 @@ class UserController extends Controller
     }
 
     public function store(StoreUserRequest $request){
-        $validated = $request->validated();
-
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role_id' => $validated['role']
-        ]);
-
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'created',
-            'target_type' => 'User',
-            'target_id' => $user->id,
-            'description' => 'created user ' . $user->name
-        ]);
+        $this->service->create($request->validated());
         return redirect()->route('admin.users.index');
     }
 
@@ -49,31 +34,12 @@ class UserController extends Controller
     }
 
     public function update(User $user, UpdateUserRequest $request){
-        $validated = $request->validated();
-
-        $user->update([
-            'name' => $validated['name'],
-            'role_id' => $validated['role']
-        ]);
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'updated',
-            'target_type' => 'User',
-            'target_id' => $user->id,
-            'description' => 'updated user ' . $user->name
-        ]);
+        $this->service->update($user, $request->validated());
         return redirect()->route('admin.users.index');
     }
 
     public function destroy(User $user){
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'deleted',
-            'target_type' => 'User',
-            'target_id' => $user->id,
-            'description' => 'deleted user ' . $user->name
-        ]);
-        $user->delete();
+        $this->service->delete($user);
         return redirect()->route('admin.users.index');
     }
 }

@@ -5,67 +5,45 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Roles\StoreRoleRequest;
 use App\Http\Requests\Roles\UpdateRoleRequest;
-use App\Models\AuditLog;
 use App\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Services\RoleService;
 
 class RoleController extends Controller
 {
-    public function index(){
+    public function __construct(private RoleService $service) {}
+
+    public function index()
+    {
         $roles = Role::withCount('users')->get();
         return view('admin.roles.index', compact('roles'));
     }
-    public function create(){
+    public function create()
+    {
         return view('admin.roles.create');
     }
-    public function store(StoreRoleRequest $request){
-        $validated = $request->validated();
-
-        $role = Role::create([
-            'name' => $validated['name']
-        ]);
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'created',
-            'target_type' => 'Role',
-            'target_id' => $role->id,
-            'description' => 'created role ' . $role->name
-        ]);
+    public function store(StoreRoleRequest $request)
+    {
+        $this->service->create($request->validated());
         return redirect()->route('admin.roles.index');
     }
 
-    public function edit(Role $role){
+    public function edit(Role $role)
+    {
         return view('admin.roles.edit', compact('role'));
     }
 
-    public function update(Role $role, UpdateRoleRequest $request){
-        $validated = $request->validated();
-
-        $role->update([
-            'name' => $validated['name']
-        ]);
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'updated',
-            'target_type' => 'Role',
-            'target_id' => $role->id,
-            'description' => 'updated role ' . $role->name
-        ]);
+    public function update(Role $role, UpdateRoleRequest $request)
+    {
+        $this->service->update($role, $request->validated());
         return redirect()->route('admin.roles.index');
     }
-    public function destroy(Role $role){
-        if($role->users()->exists()){
-            return back()->withErrors('Role is assigned to a user');
+    public function destroy(Role $role)
+    {
+        try {
+            $this->service->delete($role);
+            return redirect()->route('admin.roles.index');
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
         }
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'deleted',
-            'target_type' => 'Role',
-            'target_id' => $role->id,
-            'description' => 'deleted role ' . $role->name
-        ]);
-        $role->delete();
-        return redirect()->route('admin.roles.index');
     }
 }
