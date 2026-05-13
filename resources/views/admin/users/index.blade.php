@@ -2,6 +2,15 @@
 
 @section('content')
     <a href='{{ route('admin.users.create') }}' class="btn btn-primary">Add New User</a>
+    <form method="GET" action="{{ route('admin.users.index')}}" class="mb-3">
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search Users..."
+            value="{{ request('search')}}"
+        >
+    </form>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -20,7 +29,7 @@
                         <a href='{{ route('admin.users.edit', $user) }}' class="btn btn-primary">Edit User</a>
                     </td>
                     <td>
-                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}}}">
+                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}">
                             @csrf
                             @method('DELETE')
                             <button type="submit"class="btn btn-danger"> Delete User</button>
@@ -29,4 +38,6 @@
             @endforeach
         </tbody>
     </table>
+
+    {{ $users->links() }}
 @endsection

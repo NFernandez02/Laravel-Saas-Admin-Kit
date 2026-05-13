@@ -15,7 +15,15 @@ class UserController extends Controller
 
 
     public function index(){
-        $users = User::with('role')->get();
+        $users = User::with('role')->
+        when(request('search'), function ($query, $search) {
+            $query->where(function($q) use ($search){
+                $q->where('name', 'like', '%'. $search . '%')
+                  ->orWhere('email', 'like', '%' . $search. '%');
+            });
+        })
+        ->paginate(10)
+        ->withQueryString();
         return view('admin.users.index', compact('users'));
     }
     public function create(){
