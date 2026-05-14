@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
@@ -12,9 +13,7 @@ Route::get('/', function () {
 })->middleware('auth');
 
 Route::middleware(['auth', 'role:admin'])->group(function(){
-    Route::get('/admin', function(){
-        return view('admin.dashboard');
-    });
+    Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
     
     //AuditLog Controller
     Route::get('/admin/logs', [AuditLogController::class, 'index'])->name('admin.logs');

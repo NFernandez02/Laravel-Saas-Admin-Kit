@@ -33,5 +33,7 @@
             @endforeach
         </tbody>
     </table>
+    <div class="mt-3">
     {{$audit_logs->links()}}
+    </div>
 @endsection
