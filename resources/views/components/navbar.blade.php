@@ -5,16 +5,16 @@
             <ul class="navbar-nav">
                 @if (auth()->user()?->role?->name === 'admin')
                     <li class="nav-item">
-                        <a href='{{route('admin.dashboard')}}'>Admin</a>
+                        <a class="nav-link" href='{{route('admin.dashboard')}}'>Admin</a>
                     </li>
                     <li class="nav-item">
-                        <a href='{{ route('admin.users.index') }}' > Check Users</a>
+                        <a class="nav-link" href='{{ route('admin.users.index') }}' > Check Users</a>
                     </li>
                     <li class="nav-item">
-                        <a href='{{ route('admin.roles.index') }}' > Check Roles</a>
+                        <a class="nav-link" href='{{ route('admin.roles.index') }}' > Check Roles</a>
                     </li>
                     <li class="nav-item">
-                        <a href='{{ route('admin.logs') }}' > Check Logs</a>
+                        <a class="nav-link" href='{{ route('admin.logs') }}' > Check Logs</a>
                     </li>
                 @endif
             </ul>
