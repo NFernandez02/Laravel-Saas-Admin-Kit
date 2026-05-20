@@ -12,7 +12,7 @@
             <label class="form-check-label" for="role">Role:</label>
             <select class="form-select" id="role" name="role" >
                 @foreach ($roles as $role)
-                    <option value="{{ $role->id }}" >{{ $role->name }}</option>
+                    <option value="{{ $role->id }}" {{$user->role_id == $role->id ? 'selected' : ''}}>{{ $role->name }}</option>
                 @endforeach
             </select>
         </div>

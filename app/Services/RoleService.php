@@ -14,6 +14,7 @@ class RoleService
         $role = Role::create([
             'name' => $data['name']
         ]);
+        $role->permissions()->sync($data['permissions']);
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'created',
@@ -29,6 +30,7 @@ class RoleService
         $role->update([
             'name' => $data['name']
         ]);
+        $role->permissions()->sync($data['permissions']);
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'updated',
