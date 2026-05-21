@@ -15,6 +15,9 @@ class UserController extends Controller
 
 
     public function index(){
+        if(auth()->user()->cannot('viewAny', User::class)){
+            abort(403);
+        }
         $users = User::with('role')->
         when(request('search'), function ($query, $search) {
             $query->where(function($q) use ($search){
@@ -27,26 +30,42 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
     public function create(){
+        if(auth()->user()->cannot('create', User::class)){
+            abort(403);
+        }
         $roles = Role::all();
         return view('admin.users.create', compact('roles'));
     }
 
     public function store(StoreUserRequest $request){
+        if(auth()->user()->cannot('create', User::class)){
+            abort(403);
+        }
+
         $this->service->create($request->validated());
         return redirect()->route('admin.users.index');
     }
 
     public function edit(User $user){
+        if(auth()->user()->cannot('update', $user)){
+            abort(403);
+        }
         $roles = Role::all();
         return view('admin.users.edit', compact(['user', 'roles']));
     }
 
     public function update(User $user, UpdateUserRequest $request){
+        if(auth()->user()->cannot('update', $user)){
+            abort(403);
+        }
         $this->service->update($user, $request->validated());
         return redirect()->route('admin.users.index');
     }
 
     public function destroy(User $user){
+        if(auth()->user()->cannot('delete', $user)){
+            abort(403);
+        }
         $this->service->delete($user);
         return redirect()->route('admin.users.index');
     }
