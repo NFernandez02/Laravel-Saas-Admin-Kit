@@ -21,6 +21,9 @@
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
+                    <li class="nav-item">
+                        <a class="nav-link" href='{{route('users.profile.index')}}'>Profile</a>
+                    </li>
                     <form action="/logout" method="POST">
                         @csrf
                         <button type="submit">Logout User</button>

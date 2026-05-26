@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\ProfileController;
 use App\Models\AuditLog;
 use Illuminate\Support\Facades\Route;
 
@@ -69,6 +71,19 @@ Route::prefix('admin')
                 ->name('admin.roles.destroy');
         });
     });
+    
+Route::middleware('auth')->group(function(){
+    //ProfileController
+    Route::get('/profile', [ProfileController::class, 'index'])
+    ->name('users.profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])
+    ->name('users.profile.update');
+
+    //PasswordController
+    Route::put('/password', [PasswordController::class, 'update'])
+    ->name('users.password.update');
+});
+
 
 //Auth Controller
 Route::get('/login', [AuthController::class, 'login'])->name('login');

@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Models\AuditLog;
 use App\Models\Role;
-use Exception;
-use Illuminate\Support\Facades\Hash;
 
 class RoleService
 {
