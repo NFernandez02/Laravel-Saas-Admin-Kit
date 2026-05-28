@@ -11,7 +11,8 @@ use App\Models\AuditLog;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home.dashboard');
+    $user = auth()->user();
+    return view('home.dashboard', compact('user'));
 })->middleware('auth');
 
 Route::prefix('admin')

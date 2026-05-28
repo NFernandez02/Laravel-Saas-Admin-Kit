@@ -22,10 +22,12 @@ class UpdateProfileRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = $this->route('user');
+        $user = auth()->user();
         return [
             'name' => ['required', 'string' ],
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user)]
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user)],
+            'bio' => ['nullable', 'string', 'max:100'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048']
         ]; 
     }
 }

@@ -24,6 +24,6 @@ class ProfileController extends Controller
         }
         $this->service->update($user, $request->validated());
 
-        return redirect()->route('users.profile.index');
+        return redirect()->route('users.profile.update');
     }
 }

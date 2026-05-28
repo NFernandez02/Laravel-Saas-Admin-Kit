@@ -5,29 +5,35 @@
             <ul class="navbar-nav">
                 @if (auth()->user()?->role?->name === 'admin')
                     <li class="nav-item">
-                        <a class="nav-link" href='{{route('admin.dashboard')}}'>Admin</a>
+                        <a class="nav-link" href='{{ route('admin.dashboard') }}'>Admin</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href='{{ route('admin.users.index') }}' > Check Users</a>
+                        <a class="nav-link" href='{{ route('admin.users.index') }}'> Check Users</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href='{{ route('admin.roles.index') }}' > Check Roles</a>
+                        <a class="nav-link" href='{{ route('admin.roles.index') }}'> Check Roles</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href='{{ route('admin.logs') }}' > Check Logs</a>
+                        <a class="nav-link" href='{{ route('admin.logs') }}'> Check Logs</a>
                     </li>
                 @endif
             </ul>
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
+                <li class="nav-item">
+                    <a class="nav-link" href='{{ route('users.profile.index') }}'>Profile</a>
+                </li>
+                <form action="/logout" method="POST">
+                    @csrf
+                    <button type="submit">Logout User</button>
+                </form>
+
+                @if (auth()->user()->avatar)
                     <li class="nav-item">
-                        <a class="nav-link" href='{{route('users.profile.index')}}'>Profile</a>
+                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}" width="50" class="rounded-circle">
                     </li>
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <button type="submit">Logout User</button>
-                    </form>
+                @endif
                 </li>
             </ul>
         @endauth
