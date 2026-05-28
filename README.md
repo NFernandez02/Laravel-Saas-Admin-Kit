@@ -39,7 +39,7 @@ A Laravel 13-based SaaS admin starter kit featuring authentication, RBAC, permis
 ## Installation
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/NFernandez02/Laravel-Saas-Admin-Kit
 
 cd laravel-saas-admin-kit
 
