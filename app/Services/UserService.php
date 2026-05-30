@@ -16,6 +16,7 @@ class UserService
             'password' => Hash::make($data['password']),
             'role_id' => $data['role']
         ]);
+        $user->load('role');
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'created',
@@ -32,6 +33,8 @@ class UserService
             'name' => $data['name'],
             'role_id' => $data['role']
         ]);
+        $user->refresh();
+        $user->load('role');
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'updated',
@@ -39,6 +42,7 @@ class UserService
             'target_id' => $user->id,
             'description' => 'updated user ' . $user->name
         ]);
+        return $user;
     }
     public function delete(User $user)
     {
