@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
@@ -70,6 +71,28 @@ Route::prefix('admin')
             Route::delete('/{role}', [RoleController::class, 'destroy'])
                 ->middleware('permission:roles.delete')
                 ->name('admin.roles.destroy');
+        });
+
+        //Permission Controller
+        Route::prefix('permissions')->group(function (){
+            Route::get('/', [PermissionController::class, 'index'])
+            ->middleware('permission:permissions.view')
+            ->name('admin.permissions.index');
+            Route::get('/create', [PermissionController::class, 'create'])
+            ->middleware('permission:permissions.create')
+            ->name('admin.permissions.create');
+            Route::get('/{permission}/edit', [PermissionController::class, 'edit'])
+            ->middleware('permission:permissions.edit')
+            ->name('admin.permissions.edit');
+            Route::post('/', [PermissionController::class, 'store'])
+            ->middleware('permission:permissions.create')
+            ->name('admin.permissions.store');
+            Route::put('/{permission}', [PermissionController::class, 'update'])
+            ->middleware('permission:permissions.edit')
+            ->name('admin.permissions.update');
+            Route::delete('/{permission}', [PermissionController::class, 'destroy'])
+            ->middleware('permission:permissions.delete')
+            ->name('admin.permissions.destroy');
         });
     });
     

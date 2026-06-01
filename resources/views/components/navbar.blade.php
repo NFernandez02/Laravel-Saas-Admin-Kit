@@ -14,6 +14,9 @@
                         <a class="nav-link" href='{{ route('admin.roles.index') }}'> Check Roles</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href='{{ route('admin.permissions.index') }}'> Check Permissions</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href='{{ route('admin.logs') }}'> Check Logs</a>
                     </li>
                 @endif
