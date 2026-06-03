@@ -21,5 +21,6 @@ class PasswordService
             'target_id' => $user->id,
             'description' => 'updated password for ' . $user->name
         ]);
+        return $user;
     }
 }

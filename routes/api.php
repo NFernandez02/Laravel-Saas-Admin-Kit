@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -32,13 +34,20 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
         Route::get('/{permission}', [PermissionController::class, 'show'])->middleware('permission:permissions-view');
         Route::post('/', [PermissionController::class, 'store'])->middleware('permission:permissions-create');
         Route::put('/{permission}', [PermissionController::class, 'update'])->middleware('permission:permissions-edit');
-        Route::delete('/{permission}', [PermissionController::class, 'delete'])->middleware('permission:permissions-delete');
+        Route::delete('/{permission}', [PermissionController::class, 'destroy'])->middleware('permission:permissions-delete');
     });
 });
 
 Route::middleware('auth:sanctum')->group(function () {
     //AuthController
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    //ProfileController
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+
+    //PasswordController
+    Route::put('/password', [PasswordController::class, 'update']);
 });
 
 

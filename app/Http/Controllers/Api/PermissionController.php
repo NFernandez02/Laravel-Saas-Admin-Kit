@@ -43,12 +43,12 @@ class PermissionController extends Controller
         try{
             $this->service->delete($permission);
             return response()->json([
-                'message' => 'Permission deleted successfully.'
+                'message' => 'Permission deleted successfully'
             ]);
         } catch(\Exception $e){
             return response()->json([
                 'message' => $e->getMessage()
-            ]);
+            ], 409);
         }
     }
 }

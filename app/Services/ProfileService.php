@@ -32,5 +32,6 @@ class ProfileService
             'target_id' => $user->id,
             'description' => 'updated profile for ' . $user->name
         ]);
+        return $user;
     }
 }
