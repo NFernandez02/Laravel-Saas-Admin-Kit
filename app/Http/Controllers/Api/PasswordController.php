@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Passwords\UpdatePasswordRequest;
-use App\Http\Resources\PasswordResource;
 use App\Services\PasswordService;
-use Illuminate\Http\Request;
 
 class PasswordController extends Controller
 {
@@ -19,7 +17,7 @@ class PasswordController extends Controller
         }
         $this->service->update($user, $request->validated());
         return response()->json([
-            'message' => 'Password changed successfully'
+            'message' => 'Password changed successfully.'
         ]);
     }
 }

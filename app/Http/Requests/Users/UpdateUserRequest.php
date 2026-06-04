@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string' , 'max:100' ],
-            'role' => ['required']
+            'role_id' => ['required', 'exists:roles,id']
         ];
     }
 }

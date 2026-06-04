@@ -1,40 +1,58 @@
 # Laravel SaaS Admin Kit
 
-A Laravel 13-based SaaS admin starter kit featuring authentication, RBAC, permissions, audit logging, profile management, and scalable backend architecture.
+A Laravel 13-based SaaS admin starter kit featuring authentication, role-based access control (RBAC), permissions, audit logging, profile management, and a scalable service-layer architecture with both Web (Blade) and API (Sanctum) support.
+
+---
 
 ## Features
 
-* Authentication system
-* Role-based access control (RBAC)
-* Permission middleware
-* User & role management
-* Audit logging
-* Policy-based authorization
-* Service-layer architecture
-* Form Request validation
-* Pagination & search
-* Database seeders
-* Profile & password management
-* Avatar uploads
-* Bootstrap 5 UI
+### Authentication & Authorization
+- Laravel Sanctum authentication
+- Role-based access control (RBAC)
+- Permission-based middleware
+- Policy-based authorization
+
+### User Management
+- User CRUD (admin-only)
+- Role assignment per user
+- Profile management (name, email, bio, avatar)
+- Password update endpoint
+
+### Access Control System
+- Roles & permissions (many-to-many)
+- Route-level permission middleware
+- Admin-only route grouping
+
+### System Features
+- Audit logging (create, update, delete tracking)
+- Pagination and search
+- Service-layer architecture
+- Form Request validation
+- API + Blade hybrid structure
+
+### UI
+- Bootstrap 5 admin dashboard
+
+---
 
 ## Tech Stack
+- Laravel 13
+- PHP 8+
+- MySQL
+- Bootstrap 5
 
-* Laravel 13
-* PHP
-* MySQL
-* Bootstrap 5
+---
 
-## Backend Architecture
+## Architecture Overview
+- MVC structure
+- Service layer for business logic
+- Form Requests for validation
+- Policies for authorization
+- Eloquent relationships
+- Route model binding
+- Eager loading optimization
 
-* MVC architecture
-* Service classes
-* Middleware
-* Policies
-* Eloquent relationships
-* Route model binding
-* Eager loading
-* Validation separation
+---
 
 ## Installation
 
@@ -64,19 +82,30 @@ php artisan serve
 
 ### Admin Account
 
-Email: admin@example.com
+Email: admin@admin.com
 Password: password
 
-## Future Improvements
+## API Overview
 
-* REST API support
-* Automated testing
-* Docker setup
-* Two-factor authentication (2FA)
-* Email verification
-* Activity analytics
-* Advanced permission management
-* Tailwind UI redesign
+This project provides a RESTful API for all admin operations including:
+
+- Authentication via Laravel Sanctum
+- Role-based access control (RBAC)
+- User, Role, and Permission management
+- Profile and password management
+- Audit logging
+
+All API endpoints are documented in `API.md` in the docs folder.
+
+## Future Improvements
+- Frontend SPA (Vue or React)
+- Docker setup
+- Email verification
+- Two-factor authentication (2FA)
+- API rate limiting enhancements
+- Activity analytics dashboard
+- Advanced permission inheritance system
+- Testing (PHPUnit/Pest)
 
 ## License
 

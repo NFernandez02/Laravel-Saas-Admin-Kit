@@ -14,7 +14,7 @@ class UserService
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => $data['role']
+            'role_id' => $data['role_id']
         ]);
         $user->load('role');
         AuditLog::create([
@@ -31,7 +31,7 @@ class UserService
     {
         $user->update([
             'name' => $data['name'],
-            'role_id' => $data['role']
+            'role_id' => $data['role_id']
         ]);
         $user->refresh();
         $user->load('role');

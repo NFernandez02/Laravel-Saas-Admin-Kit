@@ -8,7 +8,6 @@ use App\Http\Requests\Users\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -62,7 +61,7 @@ class UserController extends Controller
         $this->service->delete($user);
 
         return response()->json([
-            'message' => 'User deleted successfully'
+            'message' => 'User deleted successfully.'
         ]);
     }
 }

@@ -17,7 +17,7 @@
         </div>
         <div class="mb-3">
             <label class="form-check-label" for="role">Role:</label>
-            <select class="form-select" id="role" name="role">
+            <select class="form-select" id="role" name="role_id">
                 @foreach ($roles as $role)
                     <option value="{{ $role->id }}">{{$role->name}}</option>
                 @endforeach
