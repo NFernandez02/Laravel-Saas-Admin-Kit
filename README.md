@@ -87,15 +87,13 @@ Password: password
 
 ## API Overview
 
-This project provides a RESTful API for all admin operations including:
+Full API documentation is available in the `api.md` in the docs folder.
 
-- Authentication via Laravel Sanctum
-- Role-based access control (RBAC)
-- User, Role, and Permission management
-- Profile and password management
+- Authentication endpoints
+- User, role, and permission management
+- Profile and password endpoints
 - Audit logging
-
-All API endpoints are documented in `API.md` in the docs folder.
+- Pagination and search behavior
 
 ## Future Improvements
 - Frontend SPA (Vue or React)
