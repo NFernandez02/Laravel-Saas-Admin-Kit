@@ -25,18 +25,21 @@ class PermissionController extends Controller
 
     public function show(Permission $permission){
         $permission->load('roles');
+        $permission->loadCount('roles');
         return new PermissionResource($permission);
     }
 
     public function store(StorePermissionRequest $request ){
         $permission = $this->service->create($request->validated());
         $permission->load('roles');
+        $permission->loadCount('roles');
         return new PermissionResource($permission);
     }
 
     public function update(Permission $permission, UpdatePermissionRequest $request){
         $permission = $this->service->update($permission,$request->validated());
         $permission->load('roles');
+        $permission->loadCount('roles');
         return new PermissionResource($permission);
     }
     public function destroy(Permission $permission){

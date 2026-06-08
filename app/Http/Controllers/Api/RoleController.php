@@ -25,6 +25,7 @@ class RoleController extends Controller
 
     public function show(Role $role){
         $role->load('permissions');
+        $role->loadCount('users');
         return new RoleResource($role);
     }
 
@@ -37,7 +38,8 @@ class RoleController extends Controller
     public function update(Role $role, UpdateRoleRequest $request)
     {
         $role = $this->service->update($role, $request->validated());
-
+        $role->load('permissions');
+        $role->loadCount('users');
         return new RoleResource($role);
     }
     public function destroy(Role $role)
