@@ -1,20 +1,17 @@
 <?php
 
-use App\Http\Controllers\Admin\AuditLogController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\PasswordController;
-use App\Http\Controllers\ProfileController;
-use App\Models\AuditLog;
+use App\Http\Controllers\Web\Admin\AuditLogController;
+use App\Http\Controllers\Web\Admin\DashboardController;
+use App\Http\Controllers\Web\Admin\PermissionController;
+use App\Http\Controllers\Web\Admin\RoleController;
+use App\Http\Controllers\Web\Admin\UserController;
+use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\DashboardController as UserDashboardController;
+use App\Http\Controllers\Web\PasswordController;
+use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $user = auth()->user();
-    return view('home.dashboard', compact('user'));
-})->middleware('auth');
+Route::get('/', [UserDashboardController::class, 'index'])->middleware('auth');
 
 Route::prefix('admin')
     ->middleware(['auth', 'role:admin'])

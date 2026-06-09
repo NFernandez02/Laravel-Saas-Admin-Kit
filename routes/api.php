@@ -1,15 +1,18 @@
 <?php
 
-use App\Http\Controllers\Api\AuditLogController;
+use App\Http\Controllers\Api\Admin\AuditLogController;
+use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\PermissionController;
+use App\Http\Controllers\Api\Admin\RoleController;
+use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PasswordController;
-use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    //Dashboard Controller (Admin)
+    Route::get('/', [DashboardController::class, 'index']);
 
     //AuditLog Controller
     Route::prefix('logs')->group(function(){

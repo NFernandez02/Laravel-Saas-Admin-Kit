@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
@@ -10,7 +11,7 @@ class AuthController extends Controller
     public function login(){
         return view('authentication.login');
     }
-
+    
     public function loginUser(Request $request){
         $fields = $request->validate([
             'email' => ['required', 'email'],
