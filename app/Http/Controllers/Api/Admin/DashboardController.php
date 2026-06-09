@@ -15,7 +15,7 @@ class DashboardController extends Controller
         return new AdminDashboardResource([
             'users_count' => User::count(),
             'roles_count' => Role::count(),
-            'admin_count' => User::whereHas('role', function($query){
+            'admins_count' => User::whereHas('role', function($query){
                 $query->where('name', 'admin');
             })->count(),
             'latest_logs' => AuditLog::with('user')

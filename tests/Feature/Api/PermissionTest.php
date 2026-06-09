@@ -43,6 +43,9 @@ test('authorized user can create permissions', function(){
         'name' => 'example.create'
     ]);
     $response->assertCreated();
+    $this->assertDatabaseHas('permissions', [
+        'name' => 'example.create'
+    ]);
 });
 
 test('authorized user can update permissions', function(){
@@ -67,6 +70,10 @@ test('authorized user can update permissions', function(){
             'roles'
         ]
     ]);
+    $this->assertDatabaseHas('permissions', [
+        'id' => $permission->id,
+        'name' => 'example.update'
+    ]);
 });
 
 test('authorized user can delete permissions', function(){
@@ -83,6 +90,9 @@ test('authorized user can delete permissions', function(){
     ->assertStatus(200)
     ->assertJson([
         'message' => 'Permission deleted successfully.'
+    ]);
+    $this->assertDatabaseMissing('permissions', [
+        'id' => $permission->id
     ]);
 });
 

@@ -49,6 +49,9 @@ test('authorized users can create roles', function(){
     ]);
 
     $response->assertCreated();
+    $this->assertDatabaseHas('roles', [
+        'name' => 'moderator'
+    ]);
 });
 
 test('authorized users can update roles', function(){
@@ -58,7 +61,7 @@ test('authorized users can update roles', function(){
     ]);
     Sanctum::actingAs($user);
     $role = Role::create([
-        'name' => 'moderator'
+        'name' => 'manager'
     ]);
     $role->permissions()->sync([1]);
     $response = $this->putJson("/api/admin/roles/{$role->id}", [
@@ -78,6 +81,10 @@ test('authorized users can update roles', function(){
             'permissions' 
         ]
     ]);
+    $this->assertDatabaseHas('roles', [
+        'id' => $role->id,
+        'name' => 'moderator'
+    ]);
 });
 
 test('authorized users can delete roles', function(){
@@ -96,6 +103,9 @@ test('authorized users can delete roles', function(){
     ->assertStatus(200)
     ->assertJson([
         'message' => 'Role deleted successfully.'
+    ]);
+    $this->assertDatabaseMissing('roles', [
+        'id' => $role->id
     ]);
 });
 

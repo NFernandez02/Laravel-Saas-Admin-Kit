@@ -60,6 +60,10 @@ test('user can update profile', function () {
                 'bio'
             ]
         ]);
+    $this->assertDatabaseHas('users', [
+        'id' => $user->id,
+        'name' => 'John Doe'
+    ]);
 });
 
 test('user cannot upload file that is not an image', function () {

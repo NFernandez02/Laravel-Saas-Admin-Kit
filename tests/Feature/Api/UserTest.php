@@ -47,11 +47,15 @@ test('authorized users can create a user', function(){
     $response = $this->postJson('/api/admin/users', [
         'name' => 'user',
         'email' => 'user@example.com',
-        'password' => Hash::make('password'),
+        'password' => 'password',
         'role_id' => 2
     ]);
     $response
     ->assertCreated();
+
+    $this->assertDatabaseHas('users', [
+        'email' => 'user@example.com'
+    ]);
 });
 
 test('authorized users can update a user', function(){
@@ -60,11 +64,12 @@ test('authorized users can update a user', function(){
         'role_id' => 1
     ]);
     $user = User::factory()->create([
+        'name' => 'example',
         'role_id' => 2
     ]);
     Sanctum::actingAs($admin);
     $response = $this->putJson("/api/admin/users/{$user->id}", [
-        'name' => 'example',
+        'name' => 'user',
         'role_id' => 1
     ]);
     $response
@@ -80,6 +85,10 @@ test('authorized users can update a user', function(){
                 'name'
             ]
         ]
+    ]);
+    $this->assertDatabaseHas('users', [
+        'id' => $user->id,
+        'name' => 'user'
     ]);
 });
 
@@ -98,6 +107,9 @@ test('authorized users can delete a user', function(){
     ->assertJson([
         'message' => 'User deleted successfully.'
     ]);
+    $this->assertDatabaseMissing('users', [
+        'id' => $user->id
+    ]);
 });
 
 test('authorized users cannot delete itself', function(){
@@ -109,4 +121,6 @@ test('authorized users cannot delete itself', function(){
     $response = $this->deleteJson("/api/admin/users/{$user->id}");
     $response
     ->assertStatus(403);
+
+    
 });

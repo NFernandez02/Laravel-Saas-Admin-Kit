@@ -15,9 +15,12 @@ class AdminDashboardResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'users_count' => $this['users_count'],
-            'roles_count' => $this['roles_count'],
-            'admins_count' => $this['admins_count'],
+            'stats' => [
+                'users_count' => $this['users_count'],
+                'roles_count' => $this['roles_count'],
+                'admins_count' => $this['admins_count'],
+            ],
+            
             'latest_logs' => AuditLogResource::collection($this['latest_logs'])
         ];
     }
