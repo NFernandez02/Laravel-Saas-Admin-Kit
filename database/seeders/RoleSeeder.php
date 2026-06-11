@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
@@ -15,11 +14,11 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $admin = Role::firstOrCreate([
-            'name' => 'admin'
+            'name' => 'admin',
         ]);
 
         $user = Role::firstOrCreate([
-            'name' => 'user'
+            'name' => 'user',
         ]);
 
         $admin->permissions()->sync(

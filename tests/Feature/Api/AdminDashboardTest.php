@@ -15,7 +15,7 @@ test('guest cannot access the dashboard', function () {
 test('unauthorized users cannot access the dashboard', function () {
     $this->seed();
     $user = User::factory()->create([
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin');
@@ -23,24 +23,24 @@ test('unauthorized users cannot access the dashboard', function () {
     $response->assertStatus(403);
 });
 
-test('authorized users can access the dashboard', function(){
+test('authorized users can access the dashboard', function () {
     $this->seed();
     $user = User::factory()->create([
-        'role_id' => 1
+        'role_id' => 1,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin');
 
     $response
-    ->assertStatus(200)
-    ->assertJsonStructure([
-        'data' => [
-            'stats' => [
-                'users_count',
-                'roles_count',
-                'admins_count'
+        ->assertStatus(200)
+        ->assertJsonStructure([
+            'data' => [
+                'stats' => [
+                    'users_count',
+                    'roles_count',
+                    'admins_count',
+                ],
+                'latest_logs',
             ],
-            'latest_logs'
-        ]
-    ]);
+        ]);
 });

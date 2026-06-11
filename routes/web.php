@@ -19,14 +19,14 @@ Route::prefix('admin')
 
         Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-        //AuditLog Controller
+        // AuditLog Controller
         Route::prefix('logs')->group(function () {
             Route::get('/', [AuditLogController::class, 'index'])
                 ->middleware('permission:logs.view')
                 ->name('admin.logs');
         });
 
-        //User Controller
+        // User Controller
         Route::prefix('users')->group(function () {
             Route::get('/', [UserController::class, 'index'])
                 ->middleware('permission:users.view')
@@ -48,7 +48,7 @@ Route::prefix('admin')
                 ->name('admin.users.destroy');
         });
 
-        //Role Controller
+        // Role Controller
         Route::prefix('roles')->group(function () {
             Route::get('/', [RoleController::class, 'index'])
                 ->middleware('permission:roles.view')
@@ -70,43 +70,42 @@ Route::prefix('admin')
                 ->name('admin.roles.destroy');
         });
 
-        //Permission Controller
-        Route::prefix('permissions')->group(function (){
+        // Permission Controller
+        Route::prefix('permissions')->group(function () {
             Route::get('/', [PermissionController::class, 'index'])
-            ->middleware('permission:permissions.view')
-            ->name('admin.permissions.index');
+                ->middleware('permission:permissions.view')
+                ->name('admin.permissions.index');
             Route::get('/create', [PermissionController::class, 'create'])
-            ->middleware('permission:permissions.create')
-            ->name('admin.permissions.create');
+                ->middleware('permission:permissions.create')
+                ->name('admin.permissions.create');
             Route::get('/{permission}/edit', [PermissionController::class, 'edit'])
-            ->middleware('permission:permissions.edit')
-            ->name('admin.permissions.edit');
+                ->middleware('permission:permissions.edit')
+                ->name('admin.permissions.edit');
             Route::post('/', [PermissionController::class, 'store'])
-            ->middleware('permission:permissions.create')
-            ->name('admin.permissions.store');
+                ->middleware('permission:permissions.create')
+                ->name('admin.permissions.store');
             Route::put('/{permission}', [PermissionController::class, 'update'])
-            ->middleware('permission:permissions.edit')
-            ->name('admin.permissions.update');
+                ->middleware('permission:permissions.edit')
+                ->name('admin.permissions.update');
             Route::delete('/{permission}', [PermissionController::class, 'destroy'])
-            ->middleware('permission:permissions.delete')
-            ->name('admin.permissions.destroy');
+                ->middleware('permission:permissions.delete')
+                ->name('admin.permissions.destroy');
         });
     });
-    
-Route::middleware('auth')->group(function(){
-    //ProfileController
-    Route::get('/profile', [ProfileController::class, 'index'])
-    ->name('users.profile.index');
-    Route::put('/profile', [ProfileController::class, 'update'])
-    ->name('users.profile.update');
 
-    //PasswordController
+Route::middleware('auth')->group(function () {
+    // ProfileController
+    Route::get('/profile', [ProfileController::class, 'index'])
+        ->name('users.profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])
+        ->name('users.profile.update');
+
+    // PasswordController
     Route::put('/password', [PasswordController::class, 'update'])
-    ->name('users.password.update');
+        ->name('users.password.update');
 });
 
-
-//Auth Controller
+// Auth Controller
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginUser']);
 Route::post('/logout', [AuthController::class, 'logout']);

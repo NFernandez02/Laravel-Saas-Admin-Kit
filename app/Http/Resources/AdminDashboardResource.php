@@ -20,8 +20,8 @@ class AdminDashboardResource extends JsonResource
                 'roles_count' => $this['roles_count'],
                 'admins_count' => $this['admins_count'],
             ],
-            
-            'latest_logs' => AuditLogResource::collection($this['latest_logs'])
+
+            'latest_logs' => AuditLogResource::collection($this['latest_logs']),
         ];
     }
 }

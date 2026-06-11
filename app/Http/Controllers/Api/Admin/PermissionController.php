@@ -11,46 +11,57 @@ use App\Services\PermissionService;
 
 class PermissionController extends Controller
 {
-    public function __construct(private PermissionService $service){}
-    public function index(){
+    public function __construct(private PermissionService $service) {}
+
+    public function index()
+    {
         $permissions = Permission::withCount('roles')->
-        when(request('search'), function($query, $search){
-            $query->where('name', 'like', '%'. $search. '%');
+        when(request('search'), function ($query, $search) {
+            $query->where('name', 'like', '%'.$search.'%');
         })
-        ->paginate(10)
-        ->withQueryString();
+            ->paginate(10)
+            ->withQueryString();
 
         return PermissionResource::collection($permissions);
     }
 
-    public function show(Permission $permission){
+    public function show(Permission $permission)
+    {
         $permission->load('roles');
         $permission->loadCount('roles');
+
         return new PermissionResource($permission);
     }
 
-    public function store(StorePermissionRequest $request ){
+    public function store(StorePermissionRequest $request)
+    {
         $permission = $this->service->create($request->validated());
         $permission->load('roles');
         $permission->loadCount('roles');
+
         return new PermissionResource($permission);
     }
 
-    public function update(Permission $permission, UpdatePermissionRequest $request){
-        $permission = $this->service->update($permission,$request->validated());
+    public function update(Permission $permission, UpdatePermissionRequest $request)
+    {
+        $permission = $this->service->update($permission, $request->validated());
         $permission->load('roles');
         $permission->loadCount('roles');
+
         return new PermissionResource($permission);
     }
-    public function destroy(Permission $permission){
-        try{
+
+    public function destroy(Permission $permission)
+    {
+        try {
             $this->service->delete($permission);
+
             return response()->json([
-                'message' => 'Permission deleted successfully.'
+                'message' => 'Permission deleted successfully.',
             ]);
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 409);
         }
     }

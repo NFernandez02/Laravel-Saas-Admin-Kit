@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Permission;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PermissionSeeder extends Seeder
@@ -18,7 +17,7 @@ class PermissionSeeder extends Seeder
             'users.create',
             'users.edit',
             'users.delete',
-            
+
             'roles.view',
             'roles.create',
             'roles.edit',
@@ -29,12 +28,12 @@ class PermissionSeeder extends Seeder
             'permissions.view',
             'permissions.create',
             'permissions.edit',
-            'permissions.delete'
+            'permissions.delete',
         ];
 
-        foreach($permissions as $permission){
+        foreach ($permissions as $permission) {
             Permission::firstOrCreate([
-                'name' => $permission
+                'name' => $permission,
             ]);
         }
     }

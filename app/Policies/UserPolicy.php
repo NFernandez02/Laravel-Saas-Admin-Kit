@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
@@ -60,6 +59,6 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return $user->role?->name === 'admin' && $user->id !== $model->id;;
+        return $user->role?->name === 'admin' && $user->id !== $model->id;
     }
 }

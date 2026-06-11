@@ -8,16 +8,18 @@ use App\Services\PasswordService;
 
 class PasswordController extends Controller
 {
-    public function __construct(private PasswordService $service){}
+    public function __construct(private PasswordService $service) {}
 
-    public function update(UpdatePasswordRequest $request){
+    public function update(UpdatePasswordRequest $request)
+    {
         $user = auth()->user();
-        if($user->cannot('update', $user)){
+        if ($user->cannot('update', $user)) {
             abort(403);
         }
         $this->service->update($user, $request->validated());
+
         return response()->json([
-            'message' => 'Password changed successfully.'
+            'message' => 'Password changed successfully.',
         ]);
     }
 }

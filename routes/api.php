@@ -11,15 +11,15 @@ use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    //Dashboard Controller (Admin)
+    // Dashboard Controller (Admin)
     Route::get('/', [DashboardController::class, 'index']);
 
-    //AuditLog Controller
-    Route::prefix('logs')->group(function(){
+    // AuditLog Controller
+    Route::prefix('logs')->group(function () {
         Route::get('/', [AuditLogController::class, 'index'])->middleware('permissions:logs.view');
     });
 
-    //RoleController
+    // RoleController
     Route::prefix('roles')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->middleware('permission:roles.view');
         Route::get('/{role}', [RoleController::class, 'show'])->middleware('permission:roles.view');
@@ -27,18 +27,18 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
         Route::put('/{role}', [RoleController::class, 'update'])->middleware('permission:roles.edit');
         Route::delete('/{role}', [RoleController::class, 'destroy'])->middleware('permission:roles.delete');
     });
-    
-    //UserController
+
+    // UserController
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->middleware('permission:users.view');
         Route::get('/{user}', [UserController::class, 'show'])->middleware('permission:users.view');
         Route::post('/', [UserController::class, 'store'])->middleware('permission:users.create');
-        Route::put('/{user}', [UserController::class, 'update'])->middleware('permission:users.edit');;
-        Route::delete('/{user}', [UserController::class, 'destroy'])->middleware('permission:users.delete');;
+        Route::put('/{user}', [UserController::class, 'update'])->middleware('permission:users.edit');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->middleware('permission:users.delete');
     });
 
-    //Permission Controller
-    Route::prefix('permissions')->group(function(){
+    // Permission Controller
+    Route::prefix('permissions')->group(function () {
         Route::get('/', [PermissionController::class, 'index'])->middleware('permission:permissions.view');
         Route::get('/{permission}', [PermissionController::class, 'show'])->middleware('permission:permissions.view');
         Route::post('/', [PermissionController::class, 'store'])->middleware('permission:permissions.create');
@@ -48,17 +48,16 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    //AuthController
+    // AuthController
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    //ProfileController
+    // ProfileController
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
 
-    //PasswordController
+    // PasswordController
     Route::put('/password', [PasswordController::class, 'update']);
 });
 
-
-//AuthController
+// AuthController
 Route::post('/login', [AuthController::class, 'login']);

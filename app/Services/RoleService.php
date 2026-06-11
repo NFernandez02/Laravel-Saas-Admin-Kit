@@ -10,7 +10,7 @@ class RoleService
     public function create(array $data)
     {
         $role = Role::create([
-            'name' => $data['name']
+            'name' => $data['name'],
         ]);
         $role->permissions()->sync($data['permissions']);
         AuditLog::create([
@@ -18,15 +18,16 @@ class RoleService
             'action' => 'created',
             'target_type' => 'Role',
             'target_id' => $role->id,
-            'description' => 'created role ' . $role->name
+            'description' => 'created role '.$role->name,
         ]);
+
         return $role;
     }
 
     public function update(Role $role, array $data)
     {
         $role->update([
-            'name' => $data['name']
+            'name' => $data['name'],
         ]);
         $role->permissions()->sync($data['permissions']);
         AuditLog::create([
@@ -34,13 +35,15 @@ class RoleService
             'action' => 'updated',
             'target_type' => 'Role',
             'target_id' => $role->id,
-            'description' => 'updated role ' . $role->name
+            'description' => 'updated role '.$role->name,
         ]);
+
         return $role;
     }
+
     public function delete(Role $role)
     {
-        if($role->users()->exists()){
+        if ($role->users()->exists()) {
             throw new \Exception('This role is assigned to a user');
         }
         AuditLog::create([
@@ -48,7 +51,7 @@ class RoleService
             'action' => 'deleted',
             'target_type' => 'Role',
             'target_id' => $role->id,
-            'description' => 'deleted role ' . $role->name
+            'description' => 'deleted role '.$role->name,
         ]);
         $role->delete();
     }

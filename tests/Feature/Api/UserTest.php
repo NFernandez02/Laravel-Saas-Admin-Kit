@@ -2,7 +2,6 @@
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 
 pest()->use(RefreshDatabase::class);
@@ -17,7 +16,7 @@ test('unauthorized users cannot access users', function () {
     $this->seed();
 
     $user = User::factory()->create([
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin/users');
@@ -25,11 +24,11 @@ test('unauthorized users cannot access users', function () {
     $response->assertStatus(403);
 });
 
-test('authorized users can access users', function(){
+test('authorized users can access users', function () {
     $this->seed();
 
     $user = User::factory()->create([
-        'role_id' => 1
+        'role_id' => 1,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin/users');
@@ -37,90 +36,89 @@ test('authorized users can access users', function(){
     $response->assertStatus(200);
 });
 
-test('authorized users can create a user', function(){
+test('authorized users can create a user', function () {
     $this->seed();
 
     $user = User::factory()->create([
-        'role_id' => 1
+        'role_id' => 1,
     ]);
     Sanctum::actingAs($user);
     $response = $this->postJson('/api/admin/users', [
         'name' => 'user',
         'email' => 'user@example.com',
         'password' => 'password',
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     $response
-    ->assertCreated();
+        ->assertCreated();
 
     $this->assertDatabaseHas('users', [
-        'email' => 'user@example.com'
+        'email' => 'user@example.com',
     ]);
 });
 
-test('authorized users can update a user', function(){
+test('authorized users can update a user', function () {
     $this->seed();
     $admin = User::factory()->create([
-        'role_id' => 1
+        'role_id' => 1,
     ]);
     $user = User::factory()->create([
         'name' => 'example',
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Sanctum::actingAs($admin);
     $response = $this->putJson("/api/admin/users/{$user->id}", [
         'name' => 'user',
-        'role_id' => 1
+        'role_id' => 1,
     ]);
     $response
-    ->assertStatus(200)
-    ->assertJsonStructure([
-        'data' => [
-            'id',
-            'name',
-            'email',
-            
-            'role' => [
+        ->assertStatus(200)
+        ->assertJsonStructure([
+            'data' => [
                 'id',
-                'name'
-            ]
-        ]
-    ]);
+                'name',
+                'email',
+
+                'role' => [
+                    'id',
+                    'name',
+                ],
+            ],
+        ]);
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
-        'name' => 'user'
+        'name' => 'user',
     ]);
 });
 
-test('authorized users can delete a user', function(){
+test('authorized users can delete a user', function () {
     $this->seed();
     $admin = User::factory()->create([
-        'role_id' => 1
+        'role_id' => 1,
     ]);
     $user = User::factory()->create([
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Sanctum::actingAs($admin);
     $response = $this->deleteJson("/api/admin/users/{$user->id}");
     $response
-    ->assertStatus(200)
-    ->assertJson([
-        'message' => 'User deleted successfully.'
-    ]);
+        ->assertStatus(200)
+        ->assertJson([
+            'message' => 'User deleted successfully.',
+        ]);
     $this->assertDatabaseMissing('users', [
-        'id' => $user->id
+        'id' => $user->id,
     ]);
 });
 
-test('authorized users cannot delete itself', function(){
+test('authorized users cannot delete itself', function () {
     $this->seed();
     $user = User::factory()->create([
-        'role_id' => 1
+        'role_id' => 1,
     ]);
     Sanctum::actingAs($user);
     $response = $this->deleteJson("/api/admin/users/{$user->id}");
     $response
-    ->assertStatus(403);
+        ->assertStatus(403);
 
-    
 });

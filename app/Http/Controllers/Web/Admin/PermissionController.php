@@ -10,39 +10,51 @@ use App\Services\PermissionService;
 
 class PermissionController extends Controller
 {
-    public function __construct(private PermissionService $service){}
-    public function index(){
+    public function __construct(private PermissionService $service) {}
+
+    public function index()
+    {
         $permissions = Permission::withCount('roles')
-        ->when(request('search'), function($query, $search){
-            $query->where('name', 'like', '%'. $search . '%');
-        })
-        ->paginate(10)
-        ->withQueryString();
+            ->when(request('search'), function ($query, $search) {
+                $query->where('name', 'like', '%'.$search.'%');
+            })
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.permissions.index', compact('permissions'));
     }
 
-    public function create(){
+    public function create()
+    {
         return view('admin.permissions.create');
     }
 
-    public function store(StorePermissionRequest $request){
+    public function store(StorePermissionRequest $request)
+    {
         $this->service->create($request->validated());
+
         return redirect()->route('admin.permissions.index');
     }
 
-    public function edit(Permission $permission){
+    public function edit(Permission $permission)
+    {
         return view('admin.permissions.edit', compact('permission'));
     }
-    public function update(Permission $permission, UpdatePermissionRequest $request){
-        $this->service->update($permission ,$request->validated());
+
+    public function update(Permission $permission, UpdatePermissionRequest $request)
+    {
+        $this->service->update($permission, $request->validated());
+
         return redirect()->route('admin.permissions.index');
     }
-    public function destroy(Permission $permission){
-        try{
+
+    public function destroy(Permission $permission)
+    {
+        try {
             $this->service->delete($permission);
+
             return redirect()->route('admin.permissions.index');
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return back()->withErrors($e->getMessage());
         }
     }

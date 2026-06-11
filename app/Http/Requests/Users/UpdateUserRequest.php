@@ -23,8 +23,8 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string' , 'max:100' ],
-            'role_id' => ['required', 'exists:roles,id']
+            'name' => ['required', 'string', 'max:100'],
+            'role_id' => ['required', 'exists:roles,id'],
         ];
     }
 }

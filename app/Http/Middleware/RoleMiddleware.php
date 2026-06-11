@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\In;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
@@ -18,8 +17,8 @@ class RoleMiddleware
     {
         $user = $request->user();
 
-        //If user's doesn't have a role or their role is not included on the roles passed
-        if(!$user->role || !in_array($user->role->name, $roles)){
+        // If user's doesn't have a role or their role is not included on the roles passed
+        if (! $user->role || ! in_array($user->role->name, $roles)) {
             abort(403, 'Unauthorized');
         }
 

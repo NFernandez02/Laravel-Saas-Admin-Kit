@@ -8,15 +8,16 @@ use App\Models\AuditLog;
 
 class AuditLogController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $logs = AuditLog::with('user')->
-        when(request('search'), function($query, $search){
-            $query->whereHas('user', function ($q) use ($search){
-                $q->where('name', 'like', '%'. $search. '%');
+        when(request('search'), function ($query, $search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', '%'.$search.'%');
             });
         })
-        ->paginate(10)
-        ->withQueryString();
+            ->paginate(10)
+            ->withQueryString();
 
         return AuditLogResource::collection($logs);
     }

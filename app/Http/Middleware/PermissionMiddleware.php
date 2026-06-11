@@ -17,19 +17,20 @@ class PermissionMiddleware
     {
         $user = $request->user();
 
-        if(!$user || !$user->role){
+        if (! $user || ! $user->role) {
             abort(403);
         }
 
         $hasPermission = $user->role
-        ->permissions
-        ->pluck('name')
-        ->intersect($permissions)
-        ->isNotEmpty();
+            ->permissions
+            ->pluck('name')
+            ->intersect($permissions)
+            ->isNotEmpty();
 
-        if(!$hasPermission){
+        if (! $hasPermission) {
             abort(403);
         }
+
         return $next($request);
     }
 }

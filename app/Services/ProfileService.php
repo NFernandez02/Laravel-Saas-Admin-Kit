@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileService
 {
-    
     public function update(User $user, array $data)
     {
-        if(isset($data['avatar'])){
-            if($user->avatar){
+        if (isset($data['avatar'])) {
+            if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
 
@@ -23,15 +22,16 @@ class ProfileService
             'name' => $data['name'],
             'email' => $data['email'],
             'bio' => $data['bio'] ?? null,
-            'avatar' => $data['avatar'] ?? $user->avatar
+            'avatar' => $data['avatar'] ?? $user->avatar,
         ]);
         AuditLog::create([
             'user_id' => auth()->id(),
             'action' => 'updated',
             'target_type' => 'User',
             'target_id' => $user->id,
-            'description' => 'updated profile for ' . $user->name
+            'description' => 'updated profile for '.$user->name,
         ]);
+
         return $user;
     }
 }

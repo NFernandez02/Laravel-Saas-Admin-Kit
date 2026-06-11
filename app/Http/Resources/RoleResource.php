@@ -20,8 +20,8 @@ class RoleResource extends JsonResource
             'users_count' => $this->whenCounted('users'),
             'permissions' => $this->whenLoaded(
                 'permissions',
-                fn() => $this->permissions->pluck('name')
-            )
+                fn () => $this->permissions->pluck('name')
+            ),
         ];
     }
 }

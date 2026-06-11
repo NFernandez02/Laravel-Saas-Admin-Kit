@@ -18,7 +18,7 @@ test('guest cannot access profile', function () {
 test('authenticated user can access profile', function () {
     $this->seed(RoleSeeder::class);
     $user = User::factory()->create([
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/profile');
@@ -30,15 +30,15 @@ test('authenticated user can access profile', function () {
                 'name',
                 'email',
                 'avatar',
-                'bio'
-            ]
+                'bio',
+            ],
         ]);
 });
 
 test('user can update profile', function () {
     $this->seed(RoleSeeder::class);
     $user = User::factory()->create([
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Storage::fake('public');
     $file = UploadedFile::fake()->image('avatar.png');
@@ -47,7 +47,7 @@ test('user can update profile', function () {
         'name' => 'John Doe',
         'email' => 'user@example.com',
         'avatar' => $file,
-        'bio' => 'A normal user.'
+        'bio' => 'A normal user.',
     ]);
 
     $response
@@ -57,12 +57,12 @@ test('user can update profile', function () {
                 'name',
                 'email',
                 'avatar',
-                'bio'
-            ]
+                'bio',
+            ],
         ]);
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
-        'name' => 'John Doe'
+        'name' => 'John Doe',
     ]);
 });
 
@@ -70,7 +70,7 @@ test('user cannot upload file that is not an image', function () {
     $this->seed(RoleSeeder::class);
     Storage::fake('public');
     $user = User::factory()->create([
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Sanctum::actingAs($user);
 
@@ -80,7 +80,7 @@ test('user cannot upload file that is not an image', function () {
         'name' => 'John Doe',
         'email' => 'user@example.com',
         'avatar' => $file,
-        'bio' => 'A normal user'
+        'bio' => 'A normal user',
     ]);
 
     $response
@@ -91,12 +91,12 @@ test('user cannot upload file that is not an image', function () {
 test('user can update profile without bio and avatar', function () {
     $this->seed(RoleSeeder::class);
     $user = User::factory()->create([
-        'role_id' => 2
+        'role_id' => 2,
     ]);
     Sanctum::actingAs($user);
     $response = $this->putJson('/api/profile', [
         'name' => 'John Doe',
-        'email' => 'user@example.com'
+        'email' => 'user@example.com',
     ]);
 
     $response
@@ -106,7 +106,7 @@ test('user can update profile without bio and avatar', function () {
                 'name',
                 'email',
                 'avatar',
-                'bio'
-            ]
+                'bio',
+            ],
         ]);
 });
