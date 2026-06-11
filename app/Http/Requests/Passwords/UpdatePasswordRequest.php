@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Passwords;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePasswordRequest extends FormRequest
