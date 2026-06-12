@@ -17,7 +17,6 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int $role_id
  * @property Role|null $role
  */
-
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
