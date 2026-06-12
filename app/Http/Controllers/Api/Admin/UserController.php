@@ -37,6 +37,7 @@ class UserController extends Controller
             abort(403);
         }
         $user->load('role');
+
         return new UserResource($user);
     }
 
