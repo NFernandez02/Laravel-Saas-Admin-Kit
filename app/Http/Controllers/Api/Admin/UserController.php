@@ -37,9 +37,6 @@ class UserController extends Controller
             abort(403);
         }
         $user->load('role');
-
-        $user->nan_property;
-
         return new UserResource($user);
     }
 
