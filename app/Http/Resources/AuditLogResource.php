@@ -2,12 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin AuditLog
+ * @mixin \App\Models\AuditLog
  */
 class AuditLogResource extends JsonResource
 {

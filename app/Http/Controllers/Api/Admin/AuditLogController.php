@@ -21,7 +21,4 @@ class AuditLogController extends Controller
 
         return AuditLogResource::collection($logs);
     }
-    public function test( ){
-        
-    }
 }

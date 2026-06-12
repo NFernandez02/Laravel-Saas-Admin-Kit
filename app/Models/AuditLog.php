@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
 /**
  * @property int $id
  * @property int $user_id
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $target_type
  * @property int $target_id
  * @property string $description
+ * 
  */
 class AuditLog extends Model
 {
