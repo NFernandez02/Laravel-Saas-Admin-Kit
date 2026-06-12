@@ -4,10 +4,6 @@ A Laravel 13-based SaaS admin starter kit featuring authentication, role-based a
 
 ---
 
-![Tests](https://github.com/YOUR_USERNAME/Laravel-Saas-Admin-Kit/actions/workflows/tests.yml/badge.svg)
-
----
-
 ## Features
 
 ### Authentication & Authorization
