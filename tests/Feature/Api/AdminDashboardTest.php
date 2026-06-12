@@ -32,7 +32,7 @@ test('authorized users can access the dashboard', function () {
     $response = $this->getJson('/api/admin');
 
     $response
-        ->assertStatus(999)
+        ->assertStatus(200)
         ->assertJsonStructure([
             'data' => [
                 'stats' => [
