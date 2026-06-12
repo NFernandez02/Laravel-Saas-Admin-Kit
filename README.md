@@ -3,7 +3,8 @@
 A Laravel 13-based SaaS admin starter kit featuring authentication, role-based access control (RBAC), permissions, audit logging, profile management, and a scalable service-layer architecture with both Web (Blade) and API (Sanctum) support.
 
 ---
-
+![Tests](https://github.com/NFernandez02/Laravel-Saas-Admin-Kit/actions/workflows/tests.yml/badge.svg)
+---
 ## Features
 
 ### Authentication & Authorization
