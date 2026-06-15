@@ -7,12 +7,14 @@ use App\Http\Requests\Permissions\StorePermissionRequest;
 use App\Http\Requests\Permissions\UpdatePermissionRequest;
 use App\Models\Permission;
 use App\Services\PermissionService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class PermissionController extends Controller
 {
     public function __construct(private PermissionService $service) {}
 
-    public function index()
+    public function index(): View
     {
         $permissions = Permission::withCount('roles')
             ->when(request('search'), function ($query, $search) {
@@ -24,31 +26,35 @@ class PermissionController extends Controller
         return view('admin.permissions.index', compact('permissions'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('admin.permissions.create');
     }
 
-    public function store(StorePermissionRequest $request)
+    public function store(StorePermissionRequest $request): RedirectResponse
     {
-        $this->service->create($request->validated());
+        /** @var array{name: string} $data */
+        $data = $request->validated();
+        $this->service->create($data);
 
         return redirect()->route('admin.permissions.index');
     }
 
-    public function edit(Permission $permission)
+    public function edit(Permission $permission): View
     {
         return view('admin.permissions.edit', compact('permission'));
     }
 
-    public function update(Permission $permission, UpdatePermissionRequest $request)
+    public function update(Permission $permission, UpdatePermissionRequest $request): RedirectResponse
     {
-        $this->service->update($permission, $request->validated());
+        /** @var array{name: string} $data */
+        $data = $request->validated();
+        $this->service->update($permission, $data);
 
         return redirect()->route('admin.permissions.index');
     }
 
-    public function destroy(Permission $permission)
+    public function destroy(Permission $permission): RedirectResponse
     {
         try {
             $this->service->delete($permission);

@@ -8,12 +8,14 @@ use App\Http\Requests\Users\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
     public function __construct(private UserService $service) {}
 
-    public function index()
+    public function index(): View
     {
         if (auth()->user()->cannot('viewAny', User::class)) {
             abort(403);
@@ -31,7 +33,7 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    public function create()
+    public function create(): View
     {
         if (auth()->user()->cannot('create', User::class)) {
             abort(403);
@@ -41,18 +43,25 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
         if (auth()->user()->cannot('create', User::class)) {
             abort(403);
         }
-
-        $this->service->create($request->validated());
+        /** @var array{
+         * name: string,
+         * email: string,
+         * password: string,
+         * role_id: int
+         * } $data
+         */
+        $data = $request->validated();
+        $this->service->create($data);
 
         return redirect()->route('admin.users.index');
     }
 
-    public function edit(User $user)
+    public function edit(User $user): View
     {
         if (auth()->user()->cannot('update', $user)) {
             abort(403);
@@ -62,17 +71,23 @@ class UserController extends Controller
         return view('admin.users.edit', compact(['user', 'roles']));
     }
 
-    public function update(User $user, UpdateUserRequest $request)
+    public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
         if (auth()->user()->cannot('update', $user)) {
             abort(403);
         }
-        $this->service->update($user, $request->validated());
+        /** @var array{
+         * name: string,
+         * role_id: int
+         * } $data
+         */
+        $data = $request->validated();
+        $this->service->update($user, $data);
 
         return redirect()->route('admin.users.index');
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         if (auth()->user()->cannot('delete', $user)) {
             abort(403);

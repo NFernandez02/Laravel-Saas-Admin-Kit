@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
+use Illuminate\Contracts\View\View;
 
 class AuditLogController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $audit_logs = AuditLog::with('user')->
         when(request('search'), function ($query, $search) {

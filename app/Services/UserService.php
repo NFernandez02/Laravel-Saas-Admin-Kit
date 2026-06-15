@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    public function create(array $data)
+    /**
+     * @param array{
+     *      name: string,
+     *      email: string,
+     *      password: string,
+     *      role_id: int
+     * } $data
+     */
+    public function create(array $data): User
     {
         $user = User::create([
             'name' => $data['name'],
@@ -28,7 +36,13 @@ class UserService
         return $user;
     }
 
-    public function update(User $user, array $data)
+    /**
+     * @param array{
+     *      name: string,
+     *      role_id: int
+     * } $data
+     */
+    public function update(User $user, array $data): User
     {
         $user->update([
             'name' => $data['name'],
@@ -47,7 +61,7 @@ class UserService
         return $user;
     }
 
-    public function delete(User $user)
+    public function delete(User $user): void
     {
         AuditLog::create([
             'user_id' => auth()->id(),

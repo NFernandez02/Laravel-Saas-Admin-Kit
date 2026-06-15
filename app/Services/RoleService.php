@@ -7,7 +7,13 @@ use App\Models\Role;
 
 class RoleService
 {
-    public function create(array $data)
+    /**
+     * @param array{
+     * name: string,
+     * permissions: list<int>
+     * } $data
+     */
+    public function create(array $data): Role
     {
         $role = Role::create([
             'name' => $data['name'],
@@ -24,7 +30,13 @@ class RoleService
         return $role;
     }
 
-    public function update(Role $role, array $data)
+    /**
+     * @param array{
+     * name: string,
+     * permissions: list<int>
+     * } $data
+     */
+    public function update(Role $role, array $data): Role
     {
         $role->update([
             'name' => $data['name'],
@@ -41,7 +53,7 @@ class RoleService
         return $role;
     }
 
-    public function delete(Role $role)
+    public function delete(Role $role): void
     {
         if ($role->users()->exists()) {
             throw new \Exception('This role is assigned to a user');

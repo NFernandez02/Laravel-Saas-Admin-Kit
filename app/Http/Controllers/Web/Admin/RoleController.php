@@ -8,12 +8,14 @@ use App\Http\Requests\Roles\UpdateRoleRequest;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Services\RoleService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class RoleController extends Controller
 {
     public function __construct(private RoleService $service) {}
 
-    public function index()
+    public function index(): View
     {
         $roles = Role::withCount('users')->
         when(request('search'), function ($query, $search) {
@@ -25,21 +27,27 @@ class RoleController extends Controller
         return view('admin.roles.index', compact('roles'));
     }
 
-    public function create()
+    public function create(): View
     {
         $permissions = Permission::all();
 
         return view('admin.roles.create', compact('permissions'));
     }
 
-    public function store(StoreRoleRequest $request)
+    public function store(StoreRoleRequest $request): RedirectResponse
     {
-        $this->service->create($request->validated());
+        /** @var array{
+         * name: string,
+         * permissions: list<int>
+         * } $data
+         */
+        $data = $request->validated();
+        $this->service->create($data);
 
         return redirect()->route('admin.roles.index');
     }
 
-    public function edit(Role $role)
+    public function edit(Role $role): View
     {
         $role->load('permissions');
         $permissions = Permission::all();
@@ -47,14 +55,20 @@ class RoleController extends Controller
         return view('admin.roles.edit', compact(['role', 'permissions']));
     }
 
-    public function update(Role $role, UpdateRoleRequest $request)
+    public function update(Role $role, UpdateRoleRequest $request): RedirectResponse
     {
-        $this->service->update($role, $request->validated());
+        /** @var array{
+         * name: string,
+         * permissions: list<int>
+         * } $data
+         */
+        $data = $request->validated();
+        $this->service->update($role, $data);
 
         return redirect()->route('admin.roles.index');
     }
 
-    public function destroy(Role $role)
+    public function destroy(Role $role): RedirectResponse
     {
         try {
             $this->service->delete($role);

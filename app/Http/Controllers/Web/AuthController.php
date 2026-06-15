@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function login(): View
     {
         return view('authentication.login');
     }
 
-    public function loginUser(Request $request)
+    public function loginUser(Request $request): RedirectResponse
     {
         $fields = $request->validate([
             'email' => ['required', 'email'],
@@ -34,7 +36,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         FacadesAuth::logout();
         $request->session()->invalidate();

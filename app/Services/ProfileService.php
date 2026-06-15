@@ -4,11 +4,20 @@ namespace App\Services;
 
 use App\Models\AuditLog;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileService
 {
-    public function update(User $user, array $data)
+    /**
+     * @param array{
+     * name: string,
+     * email: string,
+     * bio?: string,
+     * avatar?: UploadedFile
+     * }$data
+     */
+    public function update(User $user, array $data): User
     {
         if (isset($data['avatar'])) {
             if ($user->avatar) {

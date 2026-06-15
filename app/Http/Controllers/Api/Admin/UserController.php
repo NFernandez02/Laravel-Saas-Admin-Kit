@@ -8,18 +8,19 @@ use App\Http\Requests\Users\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
     public function __construct(private UserService $service) {}
 
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         if (auth()->user()->cannot('viewAny', User::class)) {
             abort(403);
         }
-        $users = User::with('role')->
-        when(request('search'), function ($query, $search) {
+        $users = User::with('role')->when(request('search'), function ($query, $search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%'.$search.'%')
                     ->orWhere('email', 'like', '%'.$search.'%');
@@ -31,7 +32,7 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
-    public function show(User $user)
+    public function show(User $user): UserResource
     {
         if (auth()->user()->cannot('view', $user)) {
             abort(403);
@@ -41,28 +42,41 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): UserResource
     {
         if (auth()->user()->cannot('create', User::class)) {
             abort(403);
         }
-        $user = $this->service->create($request->validated());
+        /** @var array{
+         * name: string,
+         * email: string,
+         * password: string,
+         * role_id: int
+         * } $data
+         */
+        $data = $request->validated();
+        $user = $this->service->create($data);
 
         return new UserResource($user);
     }
 
-    public function update(User $user, UpdateUserRequest $request)
+    public function update(User $user, UpdateUserRequest $request): UserResource
     {
         if (auth()->user()->cannot('update', $user)) {
             abort(403);
         }
-
-        $user = $this->service->update($user, $request->validated());
+        /** @var array{
+         * name: string,
+         * role_id: int
+         * } $data
+         */
+        $data = $request->validated();
+        $user = $this->service->update($user, $data);
 
         return new UserResource($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): JsonResponse
     {
         if (auth()->user()->cannot('delete', $user)) {
             abort(403);

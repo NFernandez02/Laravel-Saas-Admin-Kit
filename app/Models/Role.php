@@ -17,11 +17,17 @@ class Role extends Model
 {
     protected $fillable = ['name'];
 
+    /**
+     * @return HasMany<User, $this>
+     */
     public function users(): HasMany
     {
         return $this->hasMany(User::class, 'role_id');
     }
 
+    /**
+     * @return BelongsToMany<Permission, $this>
+     */
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);

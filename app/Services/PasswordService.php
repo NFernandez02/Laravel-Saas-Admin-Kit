@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordService
 {
-    public function update(User $user, array $data)
+    /**
+     * @param  array{password: string}  $data
+     */
+    public function update(User $user, array $data): User
     {
         $user->update([
             'password' => Hash::make($data['password']),

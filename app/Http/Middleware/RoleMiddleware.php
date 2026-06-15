@@ -13,12 +13,12 @@ class RoleMiddleware
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         $user = $request->user();
 
         // If user's doesn't have a role or their role is not included on the roles passed
-        if (! $user->role || ! in_array($user->role->name, $roles)) {
+        if (! $user->role || ! in_array($user->role->name, $roles, true)) {
             abort(403, 'Unauthorized');
         }
 

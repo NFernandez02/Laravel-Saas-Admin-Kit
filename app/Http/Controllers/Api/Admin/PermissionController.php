@@ -8,12 +8,14 @@ use App\Http\Requests\Permissions\UpdatePermissionRequest;
 use App\Http\Resources\PermissionResource;
 use App\Models\Permission;
 use App\Services\PermissionService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PermissionController extends Controller
 {
     public function __construct(private PermissionService $service) {}
 
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $permissions = Permission::withCount('roles')->
         when(request('search'), function ($query, $search) {
@@ -25,7 +27,7 @@ class PermissionController extends Controller
         return PermissionResource::collection($permissions);
     }
 
-    public function show(Permission $permission)
+    public function show(Permission $permission): PermissionResource
     {
         $permission->load('roles');
         $permission->loadCount('roles');
@@ -33,25 +35,29 @@ class PermissionController extends Controller
         return new PermissionResource($permission);
     }
 
-    public function store(StorePermissionRequest $request)
+    public function store(StorePermissionRequest $request): PermissionResource
     {
-        $permission = $this->service->create($request->validated());
+        /** @var array{name: string} $data */
+        $data = $request->validated();
+        $permission = $this->service->create($data);
         $permission->load('roles');
         $permission->loadCount('roles');
 
         return new PermissionResource($permission);
     }
 
-    public function update(Permission $permission, UpdatePermissionRequest $request)
+    public function update(Permission $permission, UpdatePermissionRequest $request): PermissionResource
     {
-        $permission = $this->service->update($permission, $request->validated());
+        /** @var array{name: string} $data */
+        $data = $request->validated();
+        $permission = $this->service->update($permission, $data);
         $permission->load('roles');
         $permission->loadCount('roles');
 
         return new PermissionResource($permission);
     }
 
-    public function destroy(Permission $permission)
+    public function destroy(Permission $permission): JsonResponse
     {
         try {
             $this->service->delete($permission);

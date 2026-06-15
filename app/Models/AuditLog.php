@@ -18,6 +18,9 @@ class AuditLog extends Model
 {
     protected $fillable = ['user_id', 'action', 'target_type', 'target_id', 'description'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         $user = User::where('email', $request->validated('email'))->first();
 
@@ -28,7 +29,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         auth()->user()->currentAccessToken()->delete();
 

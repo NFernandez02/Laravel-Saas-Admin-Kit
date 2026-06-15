@@ -7,7 +7,10 @@ use App\Models\Permission;
 
 class PermissionService
 {
-    public function create(array $data)
+    /**
+     * @param  array{name: string}  $data
+     */
+    public function create(array $data): Permission
     {
         $permission = Permission::create([
             'name' => $data['name'],
@@ -23,7 +26,10 @@ class PermissionService
         return $permission;
     }
 
-    public function update(Permission $permission, array $data)
+    /**
+     * @param  array{name: string}  $data
+     */
+    public function update(Permission $permission, array $data): Permission
     {
         $permission->update([
             'name' => $data['name'],
@@ -39,7 +45,7 @@ class PermissionService
         return $permission;
     }
 
-    public function delete(Permission $permission)
+    public function delete(Permission $permission): void
     {
         if ($permission->roles()->exists()) {
             throw new \Exception('This permission is assigned to a role');
