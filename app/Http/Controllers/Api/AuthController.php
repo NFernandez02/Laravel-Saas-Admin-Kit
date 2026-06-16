@@ -12,9 +12,14 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::where('email', $request->validated('email'))->first();
-
-        if (! $user || ! Hash::check($request->validated('password'), $user->password)) {
+        /** @var array{
+         * email: string,
+         * password: string
+         * } $data
+         */
+        $data = $request->validated();
+        $user = User::where('email', $data['email'])->first();
+        if (! $user || ! Hash::check($data['password'], $user->password)) {
             return response()->json([
                 'message' => 'Invalid Credentials',
             ], 401);

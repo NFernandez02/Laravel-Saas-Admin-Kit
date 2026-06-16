@@ -16,9 +16,10 @@ class PermissionController extends Controller
 
     public function index(): View
     {
+        $search = request()->string('search')->value();
         $permissions = Permission::withCount('roles')
-            ->when(request('search'), function ($query, $search) {
-                $query->where('name', 'like', '%'.$search.'%');
+            ->when(request('search'), function ($query) use ($search) {
+                $query->where('name', 'like', "{$search}%");
             })
             ->paginate(10)
             ->withQueryString();

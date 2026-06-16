@@ -18,11 +18,11 @@ class UserController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $this->authorize('viewAny', User::class);
-
-        $users = User::with('role')->when(request('search'), function ($query, $search) {
+        $search = request()->string('search')->value();
+        $users = User::with('role')->when(request('search'), function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('email', 'like', '%'.$search.'%');
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         })
             ->paginate(10)

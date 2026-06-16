@@ -17,9 +17,10 @@ class RoleController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
+        $search = request()->string('search')->value();
         $roles = Role::withCount('users')->
-        when(request('search'), function ($query, $search) {
-            $query->where('name', 'like', '%'.$search.'%');
+        when(request('search'), function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%");
         })
             ->paginate(10)
             ->withQueryString();

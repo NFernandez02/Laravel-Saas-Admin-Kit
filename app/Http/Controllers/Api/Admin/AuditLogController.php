@@ -11,10 +11,11 @@ class AuditLogController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
+        $search = request()->string('search')->value();
         $logs = AuditLog::with('user')->
-        when(request('search'), function ($query, $search) {
+        when(request('search'), function ($query) use ($search) {
             $query->whereHas('user', function ($q) use ($search) {
-                $q->where('name', 'like', '%'.$search.'%');
+                $q->where('name', 'like', "%{$search}%");
             });
         })
             ->paginate(10)
