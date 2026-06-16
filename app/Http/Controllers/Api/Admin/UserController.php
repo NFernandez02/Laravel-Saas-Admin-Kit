@@ -17,9 +17,8 @@ class UserController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        if (auth()->user()->cannot('viewAny', User::class)) {
-            abort(403);
-        }
+        $this->authorize('viewAny', User::class);
+
         $users = User::with('role')->when(request('search'), function ($query, $search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%'.$search.'%')
@@ -34,9 +33,7 @@ class UserController extends Controller
 
     public function show(User $user): UserResource
     {
-        if (auth()->user()->cannot('view', $user)) {
-            abort(403);
-        }
+        $this->authorize('view', $user);
         $user->load('role');
 
         return new UserResource($user);
@@ -44,9 +41,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): UserResource
     {
-        if (auth()->user()->cannot('create', User::class)) {
-            abort(403);
-        }
+        $this->authorize('create', User::class);
         /** @var array{
          * name: string,
          * email: string,
@@ -62,9 +57,7 @@ class UserController extends Controller
 
     public function update(User $user, UpdateUserRequest $request): UserResource
     {
-        if (auth()->user()->cannot('update', $user)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
         /** @var array{
          * name: string,
          * role_id: int
@@ -78,9 +71,7 @@ class UserController extends Controller
 
     public function destroy(User $user): JsonResponse
     {
-        if (auth()->user()->cannot('delete', $user)) {
-            abort(403);
-        }
+        $this->authorize('delete', $user);
         $this->service->delete($user);
 
         return response()->json([

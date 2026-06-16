@@ -17,9 +17,7 @@ class UserController extends Controller
 
     public function index(): View
     {
-        if (auth()->user()->cannot('viewAny', User::class)) {
-            abort(403);
-        }
+        $this->authorize('viewAny', User::class);
         $users = User::with('role')->
         when(request('search'), function ($query, $search) {
             $query->where(function ($q) use ($search) {
@@ -35,9 +33,7 @@ class UserController extends Controller
 
     public function create(): View
     {
-        if (auth()->user()->cannot('create', User::class)) {
-            abort(403);
-        }
+        $this->authorize('create', User::class);
         $roles = Role::all();
 
         return view('admin.users.create', compact('roles'));
@@ -45,9 +41,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        if (auth()->user()->cannot('create', User::class)) {
-            abort(403);
-        }
+        $this->authorize('create', User::class);
         /** @var array{
          * name: string,
          * email: string,
@@ -63,9 +57,7 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
-        if (auth()->user()->cannot('update', $user)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
         $roles = Role::all();
 
         return view('admin.users.edit', compact(['user', 'roles']));
@@ -73,9 +65,7 @@ class UserController extends Controller
 
     public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
-        if (auth()->user()->cannot('update', $user)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
         /** @var array{
          * name: string,
          * role_id: int
@@ -89,9 +79,7 @@ class UserController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
-        if (auth()->user()->cannot('delete', $user)) {
-            abort(403);
-        }
+        $this->authorize('delete', $user);
         $this->service->delete($user);
 
         return redirect()->route('admin.users.index');

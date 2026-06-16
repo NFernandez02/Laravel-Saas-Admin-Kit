@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profiles\UpdateProfileRequest;
+use App\Models\User;
 use App\Services\ProfileService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -15,20 +16,18 @@ class ProfileController extends Controller
 
     public function index(): View
     {
+        /** @var User $user */
         $user = auth()->user();
-        if (auth()->user()->cannot('view', $user)) {
-            abort(403);
-        }
+        $this->authorize('view', $user);
 
         return view('profile.edit', compact('user'));
     }
 
     public function update(UpdateProfileRequest $request): RedirectResponse
     {
+        /** @var User $user */
         $user = auth()->user();
-        if (auth()->user()->cannot('update', $user)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
         /** @var array{
          * name: string,
          * email: string,

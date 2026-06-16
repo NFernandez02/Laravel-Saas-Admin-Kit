@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Passwords\UpdatePasswordRequest;
+use App\Models\User;
 use App\Services\PasswordService;
 use Illuminate\Http\JsonResponse;
 
@@ -13,10 +14,9 @@ class PasswordController extends Controller
 
     public function update(UpdatePasswordRequest $request): JsonResponse
     {
+        /** @var User $user */
         $user = auth()->user();
-        if ($user->cannot('update', $user)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
         /** @var array{
          * password: string
          * } $data

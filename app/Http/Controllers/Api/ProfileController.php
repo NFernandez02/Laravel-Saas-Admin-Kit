@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profiles\UpdateProfileRequest;
 use App\Http\Resources\ProfileResource;
+use App\Models\User;
 use App\Services\ProfileService;
 use Illuminate\Http\UploadedFile;
 
@@ -14,21 +15,18 @@ class ProfileController extends Controller
 
     public function show(): ProfileResource
     {
+        /** @var User $user */
         $user = auth()->user();
-        if ($user->cannot('view', $user)) {
-            abort(403);
-        }
+        $this->authorize('view', $user);
 
         return new ProfileResource($user);
     }
 
     public function update(UpdateProfileRequest $request): ProfileResource
     {
-
+        /** @var User $user */
         $user = auth()->user();
-        if ($user->cannot('update', $user)) {
-            abort(403);
-        }
+        $this->authorize('update', $user);
         /** @var array{
          * name: string,
          * email: string,
