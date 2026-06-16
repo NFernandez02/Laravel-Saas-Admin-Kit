@@ -13,7 +13,7 @@ class AuditLogController extends Controller
     {
         $search = request()->string('search')->value();
         $logs = AuditLog::with('user')->
-        when(request('search'), function ($query) use ($search) {
+        when($search, function ($query) use ($search) {
             $query->whereHas('user', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });

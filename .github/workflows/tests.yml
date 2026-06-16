@@ -31,7 +31,9 @@ jobs:
 
       - name: Run Larastan
         run: ./vendor/bin/phpstan analyse --memory-limit=512M
-        
+
       - name: Run Tests
         run: php artisan test
-      
+        
+      - name: Generate API docs
+        run: php artisan scramble:export

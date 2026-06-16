@@ -19,7 +19,7 @@ class RoleController extends Controller
     {
         $search = request()->string('search')->value();
         $roles = Role::withCount('users')->
-        when(request('search'), function ($query) use ($search) {
+        when($search, function ($query) use ($search) {
             $query->where('name', 'like', "%{$search}%");
         })
             ->paginate(10)
@@ -45,6 +45,8 @@ class RoleController extends Controller
          */
         $data = $request->validated();
         $role = $this->service->create($data);
+        $role->load('permissions');
+        $role->loadCount('users');
 
         return new RoleResource($role);
     }

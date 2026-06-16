@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
         $search = request()->string('search')->value();
-        $users = User::with('role')->when(request('search'), function ($query) use ($search) {
+        $users = User::with('role')->when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
@@ -51,6 +51,7 @@ class UserController extends Controller
          */
         $data = $request->validated();
         $user = $this->service->create($data);
+        $user->load('role');
 
         return new UserResource($user);
     }
@@ -65,6 +66,7 @@ class UserController extends Controller
          */
         $data = $request->validated();
         $user = $this->service->update($user, $data);
+        $user->load('role');
 
         return new UserResource($user);
     }

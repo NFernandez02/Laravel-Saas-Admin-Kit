@@ -19,7 +19,7 @@ class PermissionController extends Controller
     {
         $search = request()->string('search')->value();
         $permissions = Permission::withCount('roles')->
-        when(request('search'), function ($query) use ($search) {
+        when($search, function ($query) use ($search) {
             $query->where('name', 'like', "%{$search}%");
         })
             ->paginate(10)
