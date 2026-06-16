@@ -16,7 +16,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
 
     // AuditLog Controller
     Route::prefix('logs')->group(function () {
-        Route::get('/', [AuditLogController::class, 'index'])->middleware('permissions:logs.view');
+        Route::get('/', [AuditLogController::class, 'index'])->middleware('permission:logs.view');
     });
 
     // RoleController
