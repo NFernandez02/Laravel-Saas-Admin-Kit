@@ -8,6 +8,28 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel_saas_admin_kit
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: laravel_saas_admin_kit
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -26,14 +48,17 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
+      - name: Run Migrations
+        run: php artisan migrate --force
+
       - name: Run Pint
-        run: ./vendor/bin/pint --test 
+        run: ./vendor/bin/pint --test
 
       - name: Run Larastan
         run: ./vendor/bin/phpstan analyse --memory-limit=512M
 
       - name: Run Tests
         run: php artisan test
-        
-      - name: Generate API docs
+
+      - name: Generate API Docs
         run: php artisan scramble:export
