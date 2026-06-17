@@ -42,7 +42,7 @@ test('authorized users can access users', function () {
 });
 
 test('authorized users can create a user', function () {
-
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
         'role_id' => $adminRole->id,
@@ -52,7 +52,7 @@ test('authorized users can create a user', function () {
         'name' => 'user',
         'email' => 'user@example.com',
         'password' => 'password',
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     $response
         ->assertCreated();
@@ -75,7 +75,7 @@ test('authorized users can update a user', function () {
     Sanctum::actingAs($admin);
     $response = $this->putJson("/api/admin/users/{$user->id}", [
         'name' => 'user',
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
     $response
         ->assertStatus(200)

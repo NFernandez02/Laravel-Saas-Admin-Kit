@@ -82,7 +82,8 @@ test('authorized users can update roles', function () {
         'users.edit',
         'users.delete',
     ])->pluck('id')->all();
-    $role->permissions()->sync([1]);
+    $permission = Permission::where('name', 'users.view')->firstOrFail();
+    $role->permissions()->sync([$permission->id]);
     $response = $this->putJson("/api/admin/roles/{$role->id}", [
         'name' => 'moderator',
         'permissions' => $permissions,
