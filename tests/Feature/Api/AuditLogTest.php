@@ -1,10 +1,15 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
 pest()->use(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->seed();
+});
 
 test('guests cannot access auditlog', function () {
     $response = $this->getJson('/api/admin/logs');
@@ -13,9 +18,9 @@ test('guests cannot access auditlog', function () {
 });
 
 test('unauthorized users cannot access auditlog', function () {
-    $this->seed();
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin/logs');
@@ -24,9 +29,9 @@ test('unauthorized users cannot access auditlog', function () {
 });
 
 test('authorized users can access auditlog', function () {
-    $this->seed();
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin/logs');

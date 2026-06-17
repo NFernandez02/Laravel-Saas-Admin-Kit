@@ -2,14 +2,8 @@
 
 @section('content')
     <a href='{{ route('admin.roles.create') }}' class="btn btn-primary">Add New Role</a>
-    <form method="GET" action="{{route('admin.roles.index')}}" class="mb-3">
-        <input
-            type="text"
-            name="search"
-            class="form-control"
-            value="{{request('search')}}"
-            placeholder="Search roles..."
-        >
+    <form method="GET" action="{{ route('admin.roles.index') }}" class="mb-3">
+        <input type="text" name="search" class="form-control" value="{{ request('search') }}" placeholder="Search roles...">
     </form>
     <table class="table table-hover">
         <thead>
@@ -36,5 +30,7 @@
             @endforeach
         </tbody>
     </table>
-    {{$roles->links()}}
+    <div class="mt-3">
+        {{ $roles->links() }}
+    </div>
 @endsection

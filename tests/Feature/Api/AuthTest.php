@@ -1,19 +1,23 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 
 pest()->use(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed();
+});
+
 test('User can log in with the right credentials', function () {
-    $this->seed(RoleSeeder::class);
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
         'email' => 'test@example.com',
         'password' => Hash::make('password'),
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
 
     $response = $this->postJson('/api/login', [
@@ -29,11 +33,12 @@ test('User can log in with the right credentials', function () {
 });
 
 test('User cannot login with invalid password', function () {
-    $this->seed(RoleSeeder::class);
+
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
         'email' => 'test@example.com',
         'password' => Hash::make('password'),
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
 
     $response = $this->postJson('/api/login', [
@@ -78,9 +83,10 @@ test('guest cannot logout', function () {
 });
 
 test('user can logout', function () {
-    $this->seed(RoleSeeder::class);
+
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
 

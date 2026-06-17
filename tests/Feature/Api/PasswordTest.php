@@ -1,16 +1,22 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\Sanctum;
 
 pest()->use(RefreshDatabase::class);
-test('authorized user can change password', function () {
+
+beforeEach(function () {
     $this->seed();
+});
+
+test('authorized user can change password', function () {
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
         'password' => Hash::make('password'),
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->putJson('/api/password', [
@@ -29,10 +35,11 @@ test('authorized user can change password', function () {
 });
 
 test('cannot change password without typing correct current password', function () {
-    $this->seed();
+
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
         'password' => Hash::make('password'),
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->putJson('/api/password', [
@@ -46,10 +53,10 @@ test('cannot change password without typing correct current password', function 
 });
 
 test('cannot change password if password confirmation is not correct', function () {
-    $this->seed();
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
         'password' => Hash::make('password'),
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->putJson('/api/password', [

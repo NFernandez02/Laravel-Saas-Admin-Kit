@@ -1,13 +1,17 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 
 pest()->use(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->seed();
+});
 
 test('guest cannot access profile', function () {
     $response = $this->getJson('/api/profile');
@@ -16,9 +20,10 @@ test('guest cannot access profile', function () {
 });
 
 test('authenticated user can access profile', function () {
-    $this->seed(RoleSeeder::class);
+
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/profile');
@@ -36,9 +41,10 @@ test('authenticated user can access profile', function () {
 });
 
 test('user can update profile', function () {
-    $this->seed(RoleSeeder::class);
+
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Storage::fake('public');
     $file = UploadedFile::fake()->image('avatar.png');
@@ -67,10 +73,11 @@ test('user can update profile', function () {
 });
 
 test('user cannot upload file that is not an image', function () {
-    $this->seed(RoleSeeder::class);
     Storage::fake('public');
+
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
 
@@ -89,9 +96,10 @@ test('user cannot upload file that is not an image', function () {
 });
 
 test('user can update profile without bio and avatar', function () {
-    $this->seed(RoleSeeder::class);
+
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->putJson('/api/profile', [

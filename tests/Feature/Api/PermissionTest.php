@@ -1,11 +1,16 @@
 <?php
 
 use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
 pest()->use(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->seed();
+});
 
 test('guest cannot access permissions', function () {
     $response = $this->getJson('/api/admin/permissions');
@@ -14,9 +19,10 @@ test('guest cannot access permissions', function () {
 });
 
 test('unauthorized user cannot access permissions', function () {
-    $this->seed();
+
+    $userRole = Role::where('name', 'user')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 2,
+        'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin/permissions');
@@ -24,9 +30,10 @@ test('unauthorized user cannot access permissions', function () {
 });
 
 test('authorized user can access permissions', function () {
-    $this->seed();
+
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->getJson('/api/admin/permissions');
@@ -34,9 +41,10 @@ test('authorized user can access permissions', function () {
 });
 
 test('authorized user can create permissions', function () {
-    $this->seed();
+
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
     $response = $this->postJson('/api/admin/permissions', [
@@ -49,9 +57,10 @@ test('authorized user can create permissions', function () {
 });
 
 test('authorized user can update permissions', function () {
-    $this->seed();
+
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
     $permission = Permission::create([
         'name' => 'example.create',
@@ -77,9 +86,10 @@ test('authorized user can update permissions', function () {
 });
 
 test('authorized user can delete permissions', function () {
-    $this->seed();
+
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 1,
+        'role_id' => $adminRole,
     ]);
     $permission = Permission::create([
         'name' => 'example.create',
@@ -97,14 +107,16 @@ test('authorized user can delete permissions', function () {
 });
 
 test('authorized user cannot delete permission with roles', function () {
-    $this->seed();
+
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
     $user = User::factory()->create([
-        'role_id' => 1,
+        'role_id' => $adminRole->id,
     ]);
     $permission = Permission::create([
         'name' => 'example.create',
     ]);
-    $permission->roles()->sync([1]);
+    $role = Role::where('name', 'admin')->firstOrFail();
+    $permission->roles()->sync([$role->id]);
     Sanctum::actingAs($user);
     $response = $this->deleteJson("/api/admin/permissions/{$permission->id}");
     $response
