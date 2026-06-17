@@ -56,6 +56,9 @@ jobs:
 
       - name: Run Larastan
         run: ./vendor/bin/phpstan analyse --memory-limit=512M
+      
+      - name: Seed Database
+        run: php artisan db:seed --force
 
       - name: Run Tests
         run: php artisan test
