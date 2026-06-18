@@ -60,4 +60,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // AuthController
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');

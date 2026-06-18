@@ -98,3 +98,26 @@ test('user can logout', function () {
             'message' => 'Logged out successfully.',
         ]);
 });
+
+test('login rate is limited', function () {
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
+    User::factory()->create([
+        'email' => 'admin@test.com',
+        'password' => 'password',
+        'role_id' => $adminRole->id,
+    ]);
+
+    for ($i = 0; $i < 5; $i++) {
+        $this->postJson('/api/login', [
+            'email' => 'admin@test.com',
+            'password' => 'wrong-password',
+        ]);
+    }
+
+    $response = $this->postJson('/api/login', [
+        'email' => 'admin@test.com',
+        'password' => 'wrong-password',
+    ]);
+
+    $response->assertStatus(429);
+});
