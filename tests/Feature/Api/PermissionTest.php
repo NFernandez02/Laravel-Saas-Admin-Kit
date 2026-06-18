@@ -13,7 +13,7 @@ beforeEach(function () {
 });
 
 test('guest cannot access permissions', function () {
-    $response = $this->getJson('/api/admin/permissions');
+    $response = $this->getJson('/api/v1/admin/permissions');
 
     $response->assertStatus(401);
 });
@@ -25,7 +25,7 @@ test('unauthorized user cannot access permissions', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin/permissions');
+    $response = $this->getJson('/api/v1/admin/permissions');
     $response->assertStatus(403);
 });
 
@@ -36,7 +36,7 @@ test('authorized user can access permissions', function () {
         'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin/permissions');
+    $response = $this->getJson('/api/v1/admin/permissions');
     $response->assertStatus(200);
 });
 
@@ -47,7 +47,7 @@ test('authorized user can create permissions', function () {
         'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->postJson('/api/admin/permissions', [
+    $response = $this->postJson('/api/v1/admin/permissions', [
         'name' => 'example.create',
     ]);
     $response->assertCreated();
@@ -66,7 +66,7 @@ test('authorized user can update permissions', function () {
         'name' => 'example.create',
     ]);
     Sanctum::actingAs($user);
-    $response = $this->putJson("/api/admin/permissions/{$permission->id}", [
+    $response = $this->putJson("/api/v1/admin/permissions/{$permission->id}", [
         'name' => 'example.update',
     ]);
     $response
@@ -95,7 +95,7 @@ test('authorized user can delete permissions', function () {
         'name' => 'example.create',
     ]);
     Sanctum::actingAs($user);
-    $response = $this->deleteJson("/api/admin/permissions/{$permission->id}");
+    $response = $this->deleteJson("/api/v1/admin/permissions/{$permission->id}");
     $response
         ->assertStatus(200)
         ->assertJson([
@@ -118,7 +118,7 @@ test('authorized user cannot delete permission with roles', function () {
     $role = Role::where('name', 'admin')->firstOrFail();
     $permission->roles()->sync([$role->id]);
     Sanctum::actingAs($user);
-    $response = $this->deleteJson("/api/admin/permissions/{$permission->id}");
+    $response = $this->deleteJson("/api/v1/admin/permissions/{$permission->id}");
     $response
         ->assertStatus(409);
 });

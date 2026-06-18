@@ -14,7 +14,7 @@ beforeEach(function () {
 });
 
 test('guest cannot access profile', function () {
-    $response = $this->getJson('/api/profile');
+    $response = $this->getJson('/api/v1/profile');
 
     $response->assertStatus(401);
 });
@@ -26,7 +26,7 @@ test('authenticated user can access profile', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/profile');
+    $response = $this->getJson('/api/v1/profile');
 
     $response
         ->assertStatus(200)
@@ -49,7 +49,7 @@ test('user can update profile', function () {
     Storage::fake('public');
     $file = UploadedFile::fake()->image('avatar.png');
     Sanctum::actingAs($user);
-    $response = $this->putJson('/api/profile', [
+    $response = $this->putJson('/api/v1/profile', [
         'name' => 'John Doe',
         'email' => 'user@example.com',
         'avatar' => $file,
@@ -83,7 +83,7 @@ test('user cannot upload file that is not an image', function () {
 
     $file = UploadedFile::fake()->create('document.pdf');
 
-    $response = $this->putJson('/api/profile', [
+    $response = $this->putJson('/api/v1/profile', [
         'name' => 'John Doe',
         'email' => 'user@example.com',
         'avatar' => $file,
@@ -102,7 +102,7 @@ test('user can update profile without bio and avatar', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->putJson('/api/profile', [
+    $response = $this->putJson('/api/v1/profile', [
         'name' => 'John Doe',
         'email' => 'user@example.com',
     ]);

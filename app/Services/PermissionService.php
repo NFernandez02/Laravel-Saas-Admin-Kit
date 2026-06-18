@@ -48,7 +48,7 @@ class PermissionService
     public function delete(Permission $permission): void
     {
         if ($permission->roles()->exists()) {
-            throw new \Exception('This permission is assigned to a role');
+            throw new \DomainException('This permission is assigned to a role');
         }
         AuditLog::create([
             'user_id' => auth()->id(),

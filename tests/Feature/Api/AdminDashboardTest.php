@@ -12,7 +12,7 @@ beforeEach(function () {
 });
 
 test('guest cannot access the dashboard', function () {
-    $response = $this->getJson('/api/admin');
+    $response = $this->getJson('/api/v1/admin');
 
     $response->assertStatus(401);
 });
@@ -23,7 +23,7 @@ test('unauthorized users cannot access the dashboard', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin');
+    $response = $this->getJson('/api/v1/admin');
 
     $response->assertStatus(403);
 });
@@ -34,7 +34,7 @@ test('authorized users can access the dashboard', function () {
         'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin');
+    $response = $this->getJson('/api/v1/admin');
 
     $response
         ->assertStatus(200)

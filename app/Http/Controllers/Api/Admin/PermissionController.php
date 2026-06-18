@@ -66,7 +66,7 @@ class PermissionController extends Controller
             return response()->json([
                 'message' => 'Permission deleted successfully.',
             ]);
-        } catch (\Exception $e) {
+        } catch (\DomainException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], 409);

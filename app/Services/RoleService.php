@@ -56,7 +56,7 @@ class RoleService
     public function delete(Role $role): void
     {
         if ($role->users()->exists()) {
-            throw new \Exception('This role is assigned to a user');
+            throw new \DomainException('This role is assigned to a user');
         }
         AuditLog::create([
             'user_id' => auth()->id(),

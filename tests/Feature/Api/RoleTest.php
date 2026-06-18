@@ -13,7 +13,7 @@ beforeEach(function () {
 });
 
 test('guest cannot access roles', function () {
-    $response = $this->getJson('/api/admin/roles');
+    $response = $this->getJson('/api/v1/admin/roles');
 
     $response->assertStatus(401);
 });
@@ -25,7 +25,7 @@ test('unauthorized users cannot access roles', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin/roles');
+    $response = $this->getJson('/api/v1/admin/roles');
 
     $response->assertStatus(403);
 });
@@ -37,7 +37,7 @@ test('authorized users can access roles', function () {
         'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin/roles');
+    $response = $this->getJson('/api/v1/admin/roles');
 
     $response->assertStatus(200);
 });
@@ -55,7 +55,7 @@ test('authorized users can create roles', function () {
         'users.delete',
     ])->pluck('id')->all();
     Sanctum::actingAs($user);
-    $response = $this->postJson('/api/admin/roles', [
+    $response = $this->postJson('/api/v1/admin/roles', [
         'name' => 'moderator',
         'permissions' => $permissions,
     ]);
@@ -84,7 +84,7 @@ test('authorized users can update roles', function () {
     ])->pluck('id')->all();
     $permission = Permission::where('name', 'users.view')->firstOrFail();
     $role->permissions()->sync([$permission->id]);
-    $response = $this->putJson("/api/admin/roles/{$role->id}", [
+    $response = $this->putJson("/api/v1/admin/roles/{$role->id}", [
         'name' => 'moderator',
         'permissions' => $permissions,
     ]);
@@ -117,7 +117,7 @@ test('authorized users can delete roles', function () {
     ]);
     $permission = Permission::where('name', 'users.view')->firstOrFail();
     $role->permissions()->sync([$permission->id]);
-    $response = $this->deleteJson("/api/admin/roles/{$role->id}");
+    $response = $this->deleteJson("/api/v1/admin/roles/{$role->id}");
 
     $response
         ->assertStatus(200)
@@ -144,7 +144,7 @@ test('authorized users cannot delete roles with a user', function () {
     ]);
     $permission = Permission::where('name', 'users.view')->firstOrFail();
     $role->permissions()->sync([$permission->id]);
-    $response = $this->deleteJson("/api/admin/roles/{$role->id}");
+    $response = $this->deleteJson("/api/v1/admin/roles/{$role->id}");
     $response
         ->assertStatus(409);
 });

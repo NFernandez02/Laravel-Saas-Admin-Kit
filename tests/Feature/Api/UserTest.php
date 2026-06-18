@@ -12,7 +12,7 @@ beforeEach(function () {
 });
 
 test('guest cannot access users', function () {
-    $response = $this->getJson('/api/admin/users');
+    $response = $this->getJson('/api/v1/admin/users');
 
     $response->assertStatus(401);
 });
@@ -24,7 +24,7 @@ test('unauthorized users cannot access users', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin/users');
+    $response = $this->getJson('/api/v1/admin/users');
 
     $response->assertStatus(403);
 });
@@ -36,7 +36,7 @@ test('authorized users can access users', function () {
         'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->getJson('/api/admin/users');
+    $response = $this->getJson('/api/v1/admin/users');
 
     $response->assertStatus(200);
 });
@@ -48,7 +48,7 @@ test('authorized users can create a user', function () {
         'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->postJson('/api/admin/users', [
+    $response = $this->postJson('/api/v1/admin/users', [
         'name' => 'user',
         'email' => 'user@example.com',
         'password' => 'password',
@@ -73,7 +73,7 @@ test('authorized users can update a user', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($admin);
-    $response = $this->putJson("/api/admin/users/{$user->id}", [
+    $response = $this->putJson("/api/v1/admin/users/{$user->id}", [
         'name' => 'user',
         'role_id' => $adminRole->id,
     ]);
@@ -108,7 +108,7 @@ test('authorized users can delete a user', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($admin);
-    $response = $this->deleteJson("/api/admin/users/{$user->id}");
+    $response = $this->deleteJson("/api/v1/admin/users/{$user->id}");
     $response
         ->assertStatus(200)
         ->assertJson([
@@ -126,7 +126,7 @@ test('authorized users cannot delete itself', function () {
         'role_id' => $adminRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->deleteJson("/api/admin/users/{$user->id}");
+    $response = $this->deleteJson("/api/v1/admin/users/{$user->id}");
     $response
         ->assertStatus(403);
 

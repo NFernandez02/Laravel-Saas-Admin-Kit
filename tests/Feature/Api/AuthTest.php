@@ -20,7 +20,7 @@ test('User can log in with the right credentials', function () {
         'role_id' => $adminRole->id,
     ]);
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->postJson('/api/v1/login', [
         'email' => 'test@example.com',
         'password' => 'password',
     ]);
@@ -41,7 +41,7 @@ test('User cannot login with invalid password', function () {
         'role_id' => $adminRole->id,
     ]);
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->postJson('/api/v1/login', [
         'email' => 'test@example.com',
         'password' => 'incorrect-password',
     ]);
@@ -55,7 +55,7 @@ test('User cannot login with invalid password', function () {
 
 test('login requires email', function () {
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->postJson('/api/v1/login', [
         'password' => 'password',
     ]);
 
@@ -66,7 +66,7 @@ test('login requires email', function () {
 
 test('login requires password', function () {
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->postJson('/api/v1/login', [
         'email' => 'test@example.com',
     ]);
 
@@ -76,7 +76,7 @@ test('login requires password', function () {
 });
 
 test('guest cannot logout', function () {
-    $response = $this->postJson('/api/logout');
+    $response = $this->postJson('/api/v1/logout');
 
     $response
         ->assertStatus(401);
@@ -90,7 +90,7 @@ test('user can logout', function () {
     ]);
     Sanctum::actingAs($user);
 
-    $response = $this->postJson('/api/logout');
+    $response = $this->postJson('/api/v1/logout');
 
     $response
         ->assertStatus(200)
@@ -108,13 +108,13 @@ test('login rate is limited', function () {
     ]);
 
     for ($i = 0; $i < 5; $i++) {
-        $this->postJson('/api/login', [
+        $this->postJson('/api/v1/login', [
             'email' => 'admin@test.com',
             'password' => 'wrong-password',
         ]);
     }
 
-    $response = $this->postJson('/api/login', [
+    $response = $this->postJson('/api/v1/login', [
         'email' => 'admin@test.com',
         'password' => 'wrong-password',
     ]);

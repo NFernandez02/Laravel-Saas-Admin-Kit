@@ -19,7 +19,7 @@ test('authorized user can change password', function () {
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->putJson('/api/password', [
+    $response = $this->putJson('/api/v1/password', [
         'current_password' => 'password',
         'password' => 'newpassword',
         'password_confirmation' => 'newpassword',
@@ -42,7 +42,7 @@ test('cannot change password without typing correct current password', function 
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->putJson('/api/password', [
+    $response = $this->putJson('/api/v1/password', [
         'current_password' => 'pass',
         'password' => 'newpassword',
         'password_confirmation' => 'newpassword',
@@ -59,7 +59,7 @@ test('cannot change password if password confirmation is not correct', function 
         'role_id' => $userRole->id,
     ]);
     Sanctum::actingAs($user);
-    $response = $this->putJson('/api/password', [
+    $response = $this->putJson('/api/v1/password', [
         'current_password' => 'password',
         'password' => 'newpassword',
         'password_confirmation' => 'password',
