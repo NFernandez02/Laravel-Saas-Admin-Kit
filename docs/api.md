@@ -1,8 +1,8 @@
-# Api Documentation
+# API Documentation
 
 ## Authorization
 
-All endpoints except login require a Sanctum token. Endpoints that require a specific permission will be stated. By default, the admin have all permissions.
+All endpoints except login require a Sanctum token. 
 
 Protected endpoints must include:
 
@@ -12,11 +12,30 @@ Header:
 Authorization: Bearer {token}
 ```
 
+Endpoints that require a specific permission will be stated. By default, the admin have all permissions.
+
 ---
 
-Admin endpoints are prefixed with:
+## API Information
 
-/api/admin
+Version: v1
+
+Base Path:
+
+```text
+/api/v1
+```
+
+Admin endpoints:
+
+```text
+/admin/*
+```
+
+---
+
+API Version: v1
+Base Path: /api/v1
 
 ## Common Responses
 
@@ -84,7 +103,7 @@ Supports:
 
 ### Login
 
-POST /api/login
+POST /login
 
 Request Fields
 
@@ -101,7 +120,7 @@ Success Response (200 OK)
 ```
 ### Logout
 
-POST /api/logout
+POST /logout
 
 Success Response (200 OK)
 ```json
@@ -113,7 +132,7 @@ Success Response (200 OK)
 
 ### Get Profile
 
-GET /api/profile
+GET /profile
 
 Success Response (200 OK)
 ```json
@@ -126,7 +145,7 @@ Success Response (200 OK)
 ```
 ### Update Profile
 
-PUT /api/profile
+PUT /profile
 
 Content-Type:
 multipart/form-data
@@ -151,7 +170,7 @@ Success Response (200 OK)
 ```
 ### Update Password
 
-PUT api/password
+PUT /password
 
 Request Fields
 
@@ -170,7 +189,7 @@ Success Response (200 OK)
 
 ### Get Users (Paginated)
 
-GET /api/admin/users
+GET /admin/users
 
 ## Query Parameters
 
@@ -198,10 +217,10 @@ Success Response (200 OK)
     }
   ],
   "links": {
-    "first": "http://localhost/api/admin/users?page=1",
-    "last": "http://localhost/api/admin/users?page=5",
+    "first": "http://localhost/api/v1/admin/users?page=1",
+    "last": "http://localhost/api/v1/admin/users?page=5",
     "prev": null,
-    "next": "http://localhost/api/admin/users?page=2"
+    "next": "http://localhost/api/v1/admin/users?page=2"
   },
   "meta": {
     "current_page": 1,
@@ -215,7 +234,7 @@ Success Response (200 OK)
 ```
 ### Get User
 
-GET /api/admin/users/{user}
+GET /admin/users/{user}
 
 **Permissions**
 
@@ -235,7 +254,7 @@ Success Response (200 OK)
 ```
 ### Create User
 
-POST /api/admin/users
+POST /admin/users
 
 **Permissions**
 
@@ -264,7 +283,7 @@ Success Response (200 OK)
 ```
 ### Update User
 
-PUT /api/admin/users/{user}
+PUT /admin/users/{user}
 
 **Permissions**
 
@@ -291,7 +310,7 @@ Success Response (200 OK)
 ```
 ### Delete User
 
-DELETE /api/admin/users/{user}
+DELETE /admin/users/{user}
 
 **Permissions**
 
@@ -307,7 +326,7 @@ Success Response (200 OK)
 
 ### Get Roles (Paginated)
 
-GET /api/admin/roles
+GET /admin/roles
 
 ## Notes
 
@@ -343,10 +362,10 @@ Success Response (200 OK)
     }
   ],
   "links": {
-    "first": "http://localhost/api/admin/roles?page=1",
-    "last": "http://localhost/api/admin/roles?page=5",
+    "first": "http://localhost/api/v1/admin/roles?page=1",
+    "last": "http://localhost/api/v1/admin/roles?page=5",
     "prev": null,
-    "next": "http://localhost/api/admin/roles?page=2"
+    "next": "http://localhost/api/v1/admin/roles?page=2"
   },
   "meta": {
     "current_page": 1,
@@ -360,7 +379,7 @@ Success Response (200 OK)
 ```
 ### Get Role
 
-GET /api/admin/roles/{role}
+GET /admin/roles/{role}
 
 **Permissions**
 
@@ -382,7 +401,7 @@ Success Response (200 OK)
 ```
 ### Create Role
 
-POST /api/admin/roles
+POST /admin/roles
 
 **Permissions**
 
@@ -411,7 +430,7 @@ Success Response (200 OK)
 ```
 ### Update Role
 
-PUT /api/admin/roles/{role}
+PUT /admin/roles/{role}
 
 **Permissions**
 
@@ -440,7 +459,7 @@ Success Response (200 OK)
 ```
 ### Delete Role
 
-DELETE /api/admin/roles/{role}
+DELETE /admin/roles/{role}
 
 **Permissions**
 
@@ -456,7 +475,7 @@ Success Response (200 OK)
 
 ### Get Permissions
 
-GET /api/admin/permissions
+GET /admin/permissions
 
 ## Notes
 
@@ -489,10 +508,10 @@ Success Response (200 OK)
     }
   ],
   "links": {
-    "first": "http://localhost/api/admin/permissions?page=1",
-    "last": "http://localhost/api/admin/permissions?page=5",
+    "first": "http://localhost/api/v1/admin/permissions?page=1",
+    "last": "http://localhost/api/v1/admin/permissions?page=5",
     "prev": null,
-    "next": "http://localhost/api/admin/permissions?page=2"
+    "next": "http://localhost/api/v1/admin/permissions?page=2"
   },
   "meta": {
     "current_page": 1,
@@ -506,7 +525,7 @@ Success Response (200 OK)
 ```
 ### Get Permission
 
-GET /api/admin/permissions/{permission}
+GET /admin/permissions/{permission}
 
 **Permissions**
 
@@ -525,7 +544,7 @@ Success Response (200 OK)
 ```
 ### Update Permission
 
-PUT /api/admin/permissions/{permission}
+PUT /admin/permissions/{permission}
 
 **Permissions**
 
@@ -550,7 +569,7 @@ Success Respone (200 OK)
 ```
 ### Delete Permission
 
-DELETE /api/admin/permissions/{permission}
+DELETE /admin/permissions/{permission}
 
 **Permissions**
 
@@ -567,7 +586,7 @@ Success Response (200 OK)
 
 ### Get Logs
 
-GET /api/admin/logs
+GET /admin/logs
 
 ## Notes
 
@@ -604,10 +623,10 @@ Success Response (200 OK)
     }
   ],
   "links": {
-    "first": "http://localhost/api/admin/logs?page=1",
-    "last": "http://localhost/api/admin/logs?page=5",
+    "first": "http://localhost/api/v1/admin/logs?page=1",
+    "last": "http://localhost/api/v1/admin/logs?page=5",
     "prev": null,
-    "next": "http://localhost/api/admin/logs?page=2"
+    "next": "http://localhost/api/v1/admin/logs?page=2"
   },
   "meta": {
     "current_page": 1,

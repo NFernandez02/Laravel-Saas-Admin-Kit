@@ -83,7 +83,7 @@ php artisan serve
 
 ### Admin Account
 
-Email: admin@admin.com
+Email: admin@example.com
 Password: password
 
 ## API Overview
