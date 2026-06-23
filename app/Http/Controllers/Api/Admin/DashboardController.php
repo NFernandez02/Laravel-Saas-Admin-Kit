@@ -20,13 +20,14 @@ class DashboardController extends Controller
                 'admins_count' => User::whereHas('role', function ($query) {
                     $query->where('name', 'admin');
                 })->count(),
-                'latest_logs' => AuditLog::with('user')
-                    ->latest()
-                    ->take(5)
-                    ->get(),
+
             ];
         });
+        $data['latest_logs'] = AuditLog::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
 
-        return new AdminDashboardResource($data);
+        return new AdminDashboardResource(array_merge($data));
     }
 }

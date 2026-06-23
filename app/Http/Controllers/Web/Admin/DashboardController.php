@@ -13,7 +13,7 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        $data = Cache::remember('admin_dashboard_web', now()->addMinutes(5), function () {
+        $data = Cache::remember('admin_dashboard_web_v2', now()->addMinutes(5), function () {
             return [
                 'totalUsers' => User::count(),
                 'totalRoles' => Role::count(),
@@ -21,13 +21,13 @@ class DashboardController extends Controller
                     $query->where('name', 'admin');
                 })->count(),
 
-                'latestLogs' => AuditLog::with('user')
-                    ->latest()
-                    ->take(5)
-                    ->get(),
             ];
         });
+        $latestLogs = AuditLog::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
 
-        return view('admin.dashboard', $data);
+        return view('admin.dashboard', $data, compact('latestLogs'));
     }
 }
