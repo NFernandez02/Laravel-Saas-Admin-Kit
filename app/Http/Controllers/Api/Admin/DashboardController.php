@@ -7,21 +7,26 @@ use App\Http\Resources\AdminDashboardResource;
 use App\Models\AuditLog;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
     public function index(): AdminDashboardResource
     {
-        return new AdminDashboardResource([
-            'users_count' => User::count(),
-            'roles_count' => Role::count(),
-            'admins_count' => User::whereHas('role', function ($query) {
-                $query->where('name', 'admin');
-            })->count(),
-            'latest_logs' => AuditLog::with('user')
-                ->latest()
-                ->take(5)
-                ->get(),
-        ]);
+        $data = Cache::remember('admin_dashboard_api', now()->addMinutes(5), function () {
+            return [
+                'users_count' => User::count(),
+                'roles_count' => Role::count(),
+                'admins_count' => User::whereHas('role', function ($query) {
+                    $query->where('name', 'admin');
+                })->count(),
+                'latest_logs' => AuditLog::with('user')
+                    ->latest()
+                    ->take(5)
+                    ->get(),
+            ];
+        });
+
+        return new AdminDashboardResource($data);
     }
 }
