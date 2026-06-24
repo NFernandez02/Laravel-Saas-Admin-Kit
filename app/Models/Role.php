@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\AdminDashboardDataChanged;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -31,5 +32,15 @@ class Role extends Model
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
+    }
+
+    protected static function booted() : void
+    {
+        /*static::created(function (){
+            AdminDashboardDataChanged::dispatch();
+        });
+        static::deleted(function (){
+            AdminDashboardDataChanged::dispatch();
+        });*/
     }
 }

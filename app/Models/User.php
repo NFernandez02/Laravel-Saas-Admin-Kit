@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Events\AdminDashboardDataChanged;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,5 +47,18 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    protected static function booted() : void
+    {
+        static::created(function (){
+            AdminDashboardDataChanged::dispatch();
+        });
+        static::updated(function (){
+            AdminDashboardDataChanged::dispatch();
+        });
+        static::deleted(function (){
+            AdminDashboardDataChanged::dispatch();
+        });
     }
 }
