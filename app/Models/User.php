@@ -49,15 +49,15 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    protected static function booted() : void
+    protected static function booted(): void
     {
-        static::created(function (){
+        static::created(function () {
             AdminDashboardDataChanged::dispatch();
         });
-        static::updated(function (){
+        static::updated(function () {
             AdminDashboardDataChanged::dispatch();
         });
-        static::deleted(function (){
+        static::deleted(function () {
             AdminDashboardDataChanged::dispatch();
         });
     }

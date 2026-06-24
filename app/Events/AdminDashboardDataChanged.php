@@ -9,6 +9,4 @@ use Illuminate\Queue\SerializesModels;
 class AdminDashboardDataChanged
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    
 }

@@ -34,7 +34,7 @@ class Role extends Model
         return $this->belongsToMany(Permission::class);
     }
 
-    protected static function booted() : void
+    protected static function booted(): void
     {
         /*static::created(function (){
             AdminDashboardDataChanged::dispatch();
