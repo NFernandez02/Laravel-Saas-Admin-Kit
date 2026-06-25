@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\CreateAuditLogJob;
 use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -33,14 +34,13 @@ class ProfileService
             'bio' => $data['bio'] ?? null,
             'avatar' => $data['avatar'] ?? $user->avatar,
         ]);
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'updated',
-            'target_type' => 'User',
-            'target_id' => $user->id,
-            'description' => 'updated profile for '.$user->name,
-        ]);
-
+        CreateAuditLogJob::dispatch(
+            auth()->id(),
+            'updated',
+            'User',
+            $user->id,
+            'updated profile for '.$user->name,
+        );
         return $user;
     }
 }

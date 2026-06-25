@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\CreateAuditLogJob;
 use App\Models\AuditLog;
 use App\Models\Role;
 
@@ -19,13 +20,13 @@ class RoleService
             'name' => $data['name'],
         ]);
         $role->permissions()->sync($data['permissions']);
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'created',
-            'target_type' => 'Role',
-            'target_id' => $role->id,
-            'description' => 'created role '.$role->name,
-        ]);
+        CreateAuditLogJob::dispatch(
+            auth()->id(),
+            'created',
+            'Role',
+            $role->id,
+            'created role '.$role->name,
+        );
 
         return $role;
     }
@@ -42,13 +43,13 @@ class RoleService
             'name' => $data['name'],
         ]);
         $role->permissions()->sync($data['permissions']);
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'updated',
-            'target_type' => 'Role',
-            'target_id' => $role->id,
-            'description' => 'updated role '.$role->name,
-        ]);
+        CreateAuditLogJob::dispatch(
+            auth()->id(),
+            'updated',
+            'Role',
+            $role->id,
+            'updated role '.$role->name,
+        );
 
         return $role;
     }
@@ -58,13 +59,13 @@ class RoleService
         if ($role->users()->exists()) {
             throw new \DomainException('This role is assigned to a user');
         }
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => 'deleted',
-            'target_type' => 'Role',
-            'target_id' => $role->id,
-            'description' => 'deleted role '.$role->name,
-        ]);
+        CreateAuditLogJob::dispatch(
+            auth()->id(),
+            'deleted',
+            'Role',
+            $role->id,
+            'deleted role '.$role->name,
+        );
         $role->delete();
     }
 }
