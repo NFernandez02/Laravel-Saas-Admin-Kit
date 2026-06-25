@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Jobs\CreateAuditLogJob;
-use App\Models\AuditLog;
 use App\Models\Role;
 
 class RoleService
@@ -20,8 +19,9 @@ class RoleService
             'name' => $data['name'],
         ]);
         $role->permissions()->sync($data['permissions']);
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'created',
             'Role',
             $role->id,
@@ -43,8 +43,9 @@ class RoleService
             'name' => $data['name'],
         ]);
         $role->permissions()->sync($data['permissions']);
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'updated',
             'Role',
             $role->id,
@@ -59,8 +60,9 @@ class RoleService
         if ($role->users()->exists()) {
             throw new \DomainException('This role is assigned to a user');
         }
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'deleted',
             'Role',
             $role->id,

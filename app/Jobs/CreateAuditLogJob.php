@@ -20,7 +20,6 @@ class CreateAuditLogJob implements ShouldQueue
         public int $target_id,
         public string $description) {}
 
-
     /**
      * Execute the job.
      */

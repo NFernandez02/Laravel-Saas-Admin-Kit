@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Jobs\CreateAuditLogJob;
-use App\Models\AuditLog;
 use App\Models\Permission;
 
 class PermissionService
@@ -16,8 +15,9 @@ class PermissionService
         $permission = Permission::create([
             'name' => $data['name'],
         ]);
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'created',
             'Permission',
             $permission->id,
@@ -35,8 +35,9 @@ class PermissionService
         $permission->update([
             'name' => $data['name'],
         ]);
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'updated',
             'Permission',
             $permission->id,
@@ -51,8 +52,9 @@ class PermissionService
         if ($permission->roles()->exists()) {
             throw new \DomainException('This permission is assigned to a role');
         }
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'deleted',
             'Permission',
             $permission->id,

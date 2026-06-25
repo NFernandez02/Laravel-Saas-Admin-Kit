@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Jobs\CreateAuditLogJob;
-use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -26,13 +25,15 @@ class UserService
             'role_id' => $data['role_id'],
         ]);
         $user->load('role');
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'created',
             'User',
             $user->id,
             'created user '.$user->name,
         );
+
         return $user;
     }
 
@@ -50,20 +51,23 @@ class UserService
         ]);
         $user->refresh();
         $user->load('role');
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'updated',
             'User',
             $user->id,
             'updated user '.$user->name,
         );
+
         return $user;
     }
 
     public function delete(User $user): void
     {
+        $userId = auth()->id();
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'deleted',
             'User',
             $user->id,

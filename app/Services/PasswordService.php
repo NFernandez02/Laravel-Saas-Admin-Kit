@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Jobs\CreateAuditLogJob;
-use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,8 +16,10 @@ class PasswordService
         $user->update([
             'password' => Hash::make($data['password']),
         ]);
+        $userId = auth()->id();
+
         CreateAuditLogJob::dispatch(
-            auth()->id(),
+            $userId === null ? null : (int) $userId,
             'updated',
             'User',
             $user->id,
