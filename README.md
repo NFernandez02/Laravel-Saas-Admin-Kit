@@ -248,6 +248,15 @@ Copy environment production file
 cp .env.production.example .env.production
 ```
 
+Edit `.env.production` and configure:
+
+```text
+APP_KEY
+MYSQL_ROOT_PASSWORD
+DB_PASSWORD
+APP_URL
+```
+
 Build and start containers:
 
 ```bash
