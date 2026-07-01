@@ -251,25 +251,25 @@ cp .env.production.example .env.production
 Build and start containers:
 
 ```bash
-docker compose -f docker-compose.prod.yml up --build -d
+docker compose --env-file .env.production -f docker-compose.prod.yml up --build -d
 ```
 
 Run database migrations:
 
 ```bash
-docker compose -f docker-compose.prod.yml exec app php artisan migrate --force
+docker compose --env-file .env.production -f docker-compose.prod.yml exec app php artisan migrate --force
 ```
 
 Create storage symlink:
 
 ```bash
-docker compose -f docker-compose.prod.yml exec app php artisan storage:link
+docker compose --env-file .env.production -f docker-compose.prod.yml exec app php artisan storage:link
 ```
 
 Verify services:
 
 ```bash
-docker compose -f docker-compose.prod.yml ps
+docker compose --env-file .env.production -f docker-compose.prod.yml ps
 ```
 
 Production stack includes:
@@ -282,7 +282,26 @@ Production stack includes:
 
 View logs with:
 ```bash
-docker compose -f docker-compose.prod.yml logs -f
+docker compose --env-file .env.production -f docker-compose.prod.yml logs -f
+```
+
+Optional Demo Data
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml exec app php artisan db:seed
+```
+Only run seeders if you want demo accounts,
+roles, permissions, and sample data.
+
+Stop the application:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml down
+```
+
+Stop and remove all data volumes:
+
+```bash
+docker compose --env-file .env.production -f docker-compose.prod.yml down -v
 ```
 
 ## Demo Credentials
