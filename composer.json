@@ -12,7 +12,9 @@
         "php": "^8.3",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^3.0"
+        "laravel/tinker": "^3.0",
+        "pragmarx/google2fa": "^9.0",
+        "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {
         "dedoc/scramble": "^0.13.28",

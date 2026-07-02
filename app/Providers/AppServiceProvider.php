@@ -29,5 +29,11 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(5)
                 ->by($request->ip());
         });
+
+        RateLimiter::for('2fa', function (Request $request) {
+            return [Limit::perMinute(5)->by($request->ip()),
+                Limit::perMinute(5)->by($request->challenge_token),
+            ];
+        });
     }
 }

@@ -99,7 +99,12 @@ Route::middleware('auth')->group(function () {
         ->name('users.profile.index');
     Route::put('/profile', [ProfileController::class, 'update'])
         ->name('users.profile.update');
-
+    Route::post('/profile/two-factor/setup', [ProfileController::class, 'setup'])
+        ->name('users.profile.two-factor.setup');
+    Route::post('/profile/two-factor/confirm', [ProfileController::class, 'confirm'])
+        ->name('users.profile.two-factor.confirm');
+    Route::delete('/profile/two-factor', [ProfileController::class, 'delete'])
+        ->name('users.profile.two-factor.delete');
     // PasswordController
     Route::put('/password', [PasswordController::class, 'update'])
         ->name('users.password.update');
@@ -109,3 +114,5 @@ Route::middleware('auth')->group(function () {
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'loginUser']);
 Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/two-factor/challenge', [AuthController::class, 'challenge'])->name('challenge');
+Route::post('/two-factor/challenge', [AuthController::class, 'verify'])->name('verify');

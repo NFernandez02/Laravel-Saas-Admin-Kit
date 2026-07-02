@@ -64,4 +64,44 @@
             </div>
         @endif
     </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h1>2-Factor Authentication</h1>
+        </div>
+        <div class="card-body">
+            @if (!$user->two_factor_enabled && !$user->two_factor_secret)
+                <form action="{{ route('users.profile.two-factor.setup') }}" method="POST">
+                    @csrf
+                    <button type="submit">Enable 2FA</button>
+                </form>
+            @endif
+            @if ($qrCode)
+                <h3>Scan this QR Code</h3>
+                {!! $qrCode !!}
+
+                <form action="{{route('users.profile.two-factor.confirm')}}" method="POST">
+                    @csrf
+                    <label> Verification Code</label>
+                    <input type="text" name="code" maxlength="6">
+                    <button type="submit">Confirm</button>
+                </form>
+            @endif
+            @if ($user->two_factor_enabled)
+                <div class="alert alert-success">
+                    2FA Auth Enabled
+                </div>
+                <form action="{{route('users.profile.two-factor.delete')}}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Disable 2FA</button>
+                </form>
+            @endif
+        </div>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                {{ $errors->first() }}
+            </div>
+        @endif
+    </div>
 @endsection

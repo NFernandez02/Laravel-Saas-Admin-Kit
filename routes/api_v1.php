@@ -61,3 +61,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // AuthController
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
+Route::post('/2fa/verify', [AuthController::class, 'verify'])->middleware('throttle:api');

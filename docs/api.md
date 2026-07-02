@@ -118,6 +118,25 @@ Success Response (200 OK)
     "token": "1|abcdefghijklmnopqrstuvwxyz"
 }
 ```
+
+### Verify 2-Factor Authentication
+
+POST /2fa/verify
+
+Request Fields
+
+| Field           | Type   | Required |
+| --------------- | ------ | -------- |
+| challenge_token | string | Yes      |
+| code            | string | Yes      |
+
+Success Response (200 OK)
+```json
+{
+    "token": "1|abcdefghijklmnopqrstuvwxyz"
+}
+```
+
 ### Logout
 
 POST /logout
