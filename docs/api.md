@@ -133,7 +133,13 @@ Request Fields
 Success Response (200 OK)
 ```json
 {
-    "token": "1|abcdefghijklmnopqrstuvwxyz"
+    "token": "1|abcdefghijklmnopqrstuvwxyz",
+    "user": {
+      "id": "1",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "role": "admin"
+    }
 }
 ```
 
@@ -147,6 +153,22 @@ Success Response (200 OK)
     "message": "Logged Out Successfully."
 }
 ```
+
+### Get Authenticated User
+
+GET /me
+
+Success Response (200 OK)
+```json
+{
+    "id": "1",
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "role": "admin"
+}
+```
+
+
 ## Profile
 
 ### Get Profile

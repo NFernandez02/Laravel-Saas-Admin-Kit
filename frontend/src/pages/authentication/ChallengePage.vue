@@ -35,7 +35,7 @@
 import { useRouter } from 'vue-router';
 import { verifyTwoFactor } from '../../services/authService';
 import { ref } from 'vue';
-
+import { useAuthStore } from '../../stores/authStore';
 
 const router = useRouter()
 
@@ -52,16 +52,15 @@ const verifyCode = async () => {
             challenge_token: challengeToken,
             code: code.value
         })
-
-        localStorage.setItem(
-            'token', result.token
-        )
-
+        const auth = useAuthStore()
+        auth.setToken(result.token)
+        auth.setUser(result.user)
+        auth.clearChallenge()
         localStorage.removeItem(
             'challenge_token'
         )
 
-        router.push('/dashboard')
+        router.push('/')
     } catch (err){
         error.value = err.response?.data?.message ?? 'Invalid code.'
     }

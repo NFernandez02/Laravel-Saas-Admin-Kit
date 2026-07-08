@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\TwoFactorService;
 use Illuminate\Http\JsonResponse;
@@ -50,9 +51,17 @@ class AuthController extends Controller
         $token = $user
             ->createToken('api-token')
             ->plainTextToken;
+        /** @var Role $role */
+        $role = $user->role;
 
         return response()->json([
             'token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $role->name,
+            ],
         ]);
     }
 
@@ -106,8 +115,32 @@ class AuthController extends Controller
             "2fa:{$challengeToken}"
         );
 
+        /** @var Role $role */
+        $role = $user->role;
+
         return response()->json([
             'token' => $token,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $role->name,
+            ],
+        ]);
+    }
+
+    public function me(): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        /** @var Role $role */
+        $role = $user->role;
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $role->name,
         ]);
     }
 }

@@ -50,6 +50,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
 Route::middleware('auth:sanctum')->group(function () {
     // AuthController
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
 
     // ProfileController
     Route::get('/profile', [ProfileController::class, 'show']);

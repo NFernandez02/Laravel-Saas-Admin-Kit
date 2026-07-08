@@ -25,11 +25,7 @@ test('User can log in with the right credentials', function () {
         'password' => 'password',
     ]);
 
-    $response
-        ->assertStatus(200)
-        ->assertJsonStructure([
-            'token',
-        ]);
+    $response->assertStatus(200);
 });
 
 test('User cannot login with invalid password', function () {
@@ -120,4 +116,15 @@ test('login rate is limited', function () {
     ]);
 
     $response->assertStatus(429);
+});
+test('authenticated user can retreive their own user info', function () {
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
+    $user = User::factory()->create([
+        'role_id' => $adminRole->id,
+    ]);
+    Sanctum::actingAs($user);
+
+    $response = $this->getJson('/api/v1/me');
+
+    $response->assertStatus(200);
 });

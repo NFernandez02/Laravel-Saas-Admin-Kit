@@ -21,7 +21,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { login } from '../../services/authService';
-
+import { useAuthStore } from '../../stores/authStore';
 const router = useRouter()
 
 const email = ref('')
@@ -31,27 +31,19 @@ const error = ref('')
 const submitLogin = async () => {
     try {
         error.value = ''
-
+        const auth = useAuthStore()
         const result = await login({
             email: email.value,
             password: password.value
         })
-
         if(result.requires_2fa){
-            localStorage.setItem(
-                'challenge_token',
-                result.challenge_token
-            )
+            auth.setChallenge(result.challenge_token)
             router.push('/challenge')
             return
         }
-
-        localStorage.setItem(
-            'token',
-            result.token
-        )
-
-        router.push('/dashboard')
+        auth.setToken(result.token)
+        auth.setUser(result.user)
+        router.push('/')
     } catch (err){
         error.value = 
             err.response?.data?.message ?? 'Login failed.'
