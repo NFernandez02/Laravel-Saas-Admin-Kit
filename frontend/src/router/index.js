@@ -4,6 +4,7 @@ import LoginPage from '../pages/authentication/LoginPage.vue'
 import ChallengePage from "../pages/authentication/ChallengePage.vue";
 import DashboardPage from "../pages/user/DashboardPage.vue";
 import { useAuthStore } from "../stores/authStore.js";
+import AdminDashboardPage from "../pages/admin/AdminDashboardPage.vue";
 
 const routes = [
     {
@@ -13,7 +14,7 @@ const routes = [
             requiresAuth: true
         }
     },
-    {   
+    {
         path: '/login',
         component: LoginPage,
         meta: {
@@ -26,7 +27,14 @@ const routes = [
         meta: {
             requiresChallenge: true
         }
-    }
+    },
+    {
+        path: '/admin',
+        component: AdminDashboardPage,
+        meta: {
+            adminOnly: true
+        }
+    },
 ]
 
 const router = createRouter({
@@ -37,15 +45,20 @@ const router = createRouter({
 router.beforeEach((to) => {
     const auth = useAuthStore()
 
-    if(to.meta.requiresAuth && !auth.isAuthenticated) {
+    if (to.meta.requiresAuth && !auth.isAuthenticated) {
         return '/login'
     }
 
-    if(to.meta.guestOnly && auth.isAuthenticated){
+    if (to.meta.guestOnly && auth.isAuthenticated) {
         return '/'
     }
-    if(to.meta.requiresChallenge){
-        if(!auth.challengeToken){
+    if (to.meta.requiresChallenge) {
+        if (!auth.challengeToken) {
+            return '/'
+        }
+    }
+    if (to.meta.adminOnly && auth.isAuthenticated) {
+        if (!auth.isAdmin) {
             return '/'
         }
     }

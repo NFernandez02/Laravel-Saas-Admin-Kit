@@ -10,7 +10,7 @@
                 Profile
             </RouterLink>
 
-            <RouterLink v-if="auth.user?.role === 'admin'" to="/admin"
+            <RouterLink v-if="auth.isAdmin" to="/admin"
                 class="rounded bg-blue-50 px-4 py-2 text-blue-700 hover:bg-blue-100">
                 Admin Mode
             </RouterLink>

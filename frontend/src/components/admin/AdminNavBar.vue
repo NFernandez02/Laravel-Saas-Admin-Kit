@@ -9,8 +9,8 @@
                 {{ auth.user?.name }}
             </span>
 
-            <button @click="handleLogout" class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600">
-                Logout
+            <button @click="handleReturn" class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600">
+                Return as User
             </button>
         </div>
     </header>
@@ -18,14 +18,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { logout } from '../services/authService';
-import { useAuthStore } from '../stores/authStore'
+import { useAuthStore } from '../../stores/authStore';
 const router = useRouter()
 const auth = useAuthStore()
 
-async function handleLogout() {
-    await logout(auth.token)
-    auth.clearAuth()
-    router.push('/login')
+async function handleReturn() {
+    router.push('/')
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <UserLayout>
 
         <div class="rounded-lg bg-white p-6 shadow">
 
@@ -14,11 +14,11 @@
 
         </div>
 
-    </AuthenticatedLayout>
+    </UserLayout>
 </template>
 
 <script setup>
-import AuthenticatedLayout from '../../layouts/AuthenticatedLayout.vue'
+import UserLayout from '../../layouts/UserLayout.vue';
 import { useAuthStore } from '../../stores/authStore'
 
 const auth = useAuthStore()
