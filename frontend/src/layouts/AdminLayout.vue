@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import AppNavBar from '../components/admin/AdminNavBar.vue';
-import AppSideBar from '../components/admin/AdminSideBar.vue';
+import AppNavBar from '@/components/admin/AdminNavBar.vue';
+import AppSideBar from '@/components/admin/AdminSideBar.vue';
 
 
 </script>

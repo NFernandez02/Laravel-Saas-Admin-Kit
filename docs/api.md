@@ -273,7 +273,7 @@ Success Response (200 OK)
   }
 }
 ```
-### Get User
+### Get User (Paginated)
 
 GET /admin/users/{user}
 

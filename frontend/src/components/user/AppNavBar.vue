@@ -18,8 +18,8 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { logout } from '../services/authService';
-import { useAuthStore } from '../../stores/authStore';
+import { logout } from '@/services/authService';
+import { useAuthStore } from '@/stores/authStore';
 const router = useRouter()
 const auth = useAuthStore()
 

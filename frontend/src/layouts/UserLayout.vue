@@ -1,14 +1,14 @@
 <template>
     <div class="min-h-screen bg-gray-100">
 
-        <AppNavbar />
+        <AppNavBar />
 
         <div class="flex">
 
-            <AppSidebar />
+            <AppSideBar />
 
             <main class="flex-1 p-6">
-                <slot/>
+                <slot />
             </main>
 
         </div>
@@ -17,6 +17,7 @@
 </template>
 
 <script setup>
-import AppNavbar from '../components/AppNavbar.vue'
-import AppSidebar from '../components/AppSidebar.vue'
+import AppNavBar from '@/components/user/AppNavBar.vue';
+import AppSideBar from '@/components/user/AppSideBar.vue';
+
 </script>
