@@ -273,7 +273,7 @@ Success Response (200 OK)
   }
 }
 ```
-### Get User (Paginated)
+### Get User
 
 GET /admin/users/{user}
 
@@ -395,10 +395,22 @@ Success Response (200 OK)
       "name": "admin",
       "users_count": 1,
       "permissions": [
-        "users.view",
-        "users.create",
-        "users.update",
-        "users.delete"
+        {
+          "id":1,
+          "name":"users.view"
+        },
+        {
+          "id":2,
+          "name":"users.create"
+        },
+        {
+          "id":3,
+          "name":"users.edit"
+        },
+        {
+          "id":4,
+          "name":"users.delete"
+        }
       ]
     }
   ],

@@ -6,6 +6,7 @@ import DashboardPage from "../pages/user/DashboardPage.vue";
 import { useAuthStore } from "../stores/authStore.js";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage.vue";
 import UserManagementPage from "../pages/admin/UserManagementPage.vue";
+import RoleManagementPage from "../pages/admin/RoleManagementPage.vue";
 
 const routes = [
     {
@@ -39,6 +40,13 @@ const routes = [
     {
         path: '/admin/users',
         component: UserManagementPage,
+        meta: {
+            adminOnly: true
+        }
+    },
+    {
+        path: '/admin/roles',
+        component: RoleManagementPage,
         meta: {
             adminOnly: true
         }

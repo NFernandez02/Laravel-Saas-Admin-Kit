@@ -12,7 +12,8 @@
                     {{ error }}
                 </div>
 
-                <button type="submit" class="w-full rounded bg-black text-white p-2">Login</button>
+                <button :disabled="authenticating" type="submit" class="w-full rounded bg-black text-white p-2 
+                disabled:bg-gray-400">{{authenticating ? 'Logging in...' : 'Login'}}</button>
             </form>
         </div>
     </div>
@@ -24,12 +25,15 @@ import { login } from '../../services/authService';
 import { useAuthStore } from '../../stores/authStore';
 const router = useRouter()
 
+const authenticating = ref(false)
+
 const email = ref('')
 const password = ref('')
 const error = ref('')
 
 const submitLogin = async () => {
     try {
+        authenticating.value = true
         error.value = ''
         const auth = useAuthStore()
         const result = await login({
@@ -47,6 +51,8 @@ const submitLogin = async () => {
     } catch (err){
         error.value = 
             err.response?.data?.message ?? 'Login failed.'
+    } finally {
+        authenticating.value = false
     }
 }
 </script>
