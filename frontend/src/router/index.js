@@ -8,6 +8,7 @@ import AdminDashboardPage from "../pages/admin/AdminDashboardPage.vue";
 import UserManagementPage from "../pages/admin/UserManagementPage.vue";
 import RoleManagementPage from "../pages/admin/RoleManagementPage.vue";
 import PermissionManagementPage from "../pages/admin/PermissionManagementPage.vue";
+import AuditLogManagementPage from "../pages/admin/AuditLogManagementPage.vue";
 
 const routes = [
     {
@@ -58,7 +59,14 @@ const routes = [
         meta: {
             adminOnly: true
         }
-    }
+    },
+    {
+        path: '/admin/audit-logs',
+        component: AuditLogManagementPage,
+        meta: {
+            adminOnly: true
+        }
+    },
 ]
 
 const router = createRouter({
