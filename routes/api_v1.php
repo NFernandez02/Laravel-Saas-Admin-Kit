@@ -40,6 +40,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(functi
     // Permission Controller
     Route::prefix('permissions')->group(function () {
         Route::get('/', [PermissionController::class, 'index'])->middleware('permission:permissions.view');
+        Route::get('/all', [PermissionController::class, 'all'])->middleware('permission:permissions.view');
         Route::get('/{permission}', [PermissionController::class, 'show'])->middleware('permission:permissions.view');
         Route::post('/', [PermissionController::class, 'store'])->middleware('permission:permissions.create');
         Route::put('/{permission}', [PermissionController::class, 'update'])->middleware('permission:permissions.edit');

@@ -25,8 +25,15 @@
                 </div>
 
                 <div class="rounded-lg border bg-white p-4 shadow-sm">
-                    <input v-model="search" type="text" placeholder="Search users..."
-                        class="w-full rounded-lg border p-2">
+                    <form @submit.prevent="loadUsers(1)" class="flex gap-2">
+                        <input v-model="search" type="text" placeholder="Search logs..." class="flex-1 rounded-lg border border-gray-300 px-3 py-2
+               focus:border-blue-500 focus:outline-none">
+
+                        <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 text-white
+               transition hover:bg-blue-700">
+                            Search
+                        </button>
+                    </form>
                 </div>
 
                 <div class="overflow-hidden rounded-lg border bg-white shadow-sm">
@@ -148,20 +155,29 @@ const pagination = ref({
 const links = ref({})
 
 async function loadUsers(page = 1) {
-    const data = await getUsers(page)
+    const data = await getUsers(page, search.value)
 
     console.log(data)
 
     users.value = data.data
     pagination.value = data.meta
     links.value = data.links
+
+    if (
+        data.meta.last_page > 0 &&
+        page > data.meta.last_page
+    ) {
+        return loadUsers(
+            data.meta.last_page
+        )
+    }
 }
 
 function nextPage() {
     if (!pagination.value.current_page) return
 
     loadUsers(
-        pagination.value.current_page + 1
+        pagination.value.current_page + 1, search.value
     )
 }
 
@@ -169,7 +185,7 @@ function previousPage() {
     if (!pagination.value.current_page) return
 
     loadUsers(
-        pagination.value.current_page - 1
+        pagination.value.current_page - 1, search.value
     )
 }
 
@@ -181,8 +197,8 @@ function openEditModal(user) {
 async function handleCreate(userData) {
     creatingUser.value = true
     try {
-        loading.value = true
         await createUser(userData)
+        loading.value = true
         showCreateModal.value = false
         await loadUsers(pagination.value.current_page)
     } finally {
@@ -195,8 +211,8 @@ async function handleCreate(userData) {
 async function handleEdit(userData) {
     editingUser.value = true
     try {
-        loading.value = true
         await updateUser(userData.id, userData)
+        loading.value = true
         showEditModal.value = false
         await loadUsers(pagination.value.current_page)
     } finally {
@@ -216,8 +232,8 @@ async function handleDelete(user) {
     deletingUser.value = true
 
     try {
-        loading.value = true
         await deleteUser(user.id)
+        loading.value = true
         await loadUsers(pagination.value.current_page)
     } finally {
         deletingUser.value = false

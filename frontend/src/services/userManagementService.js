@@ -1,7 +1,7 @@
 import api from "./authService";
 
-export async function getUsers(page = 1) {
-    const response = await api.get(`/admin/users?page=${page}`)
+export async function getUsers(page = 1, search = '') {
+    const response = await api.get(`/admin/users?page=${page}&search=${encodeURIComponent(search)}`)
 
     return response.data
 }

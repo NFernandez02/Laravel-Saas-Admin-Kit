@@ -1,7 +1,13 @@
 import api from "./authService";
 
-export async function getPermissions(page = 1) {
-    const response = await api.get(`/admin/permissions?page=${page}`)
+export async function getPermissions(page = 1, search ='') {
+    const response = await api.get(`/admin/permissions?page=${page}&search=${encodeURIComponent(search)}`)
+
+    return response.data
+}
+
+export async function getAllPermissions() {
+    const response = await api.get('/admin/permissions/all')
 
     return response.data
 }

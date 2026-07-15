@@ -25,8 +25,15 @@
                 </div>
 
                 <div class="rounded-lg border bg-white p-4 shadow-sm">
-                    <input v-model="search" type="text" placeholder="Search permissions..."
-                        class="w-full rounded-lg border p-2">
+                    <form @submit.prevent="loadPermissions(1)" class="flex gap-2">
+                        <input v-model="search" type="text" placeholder="Search logs..." class="flex-1 rounded-lg border border-gray-300 px-3 py-2
+               focus:border-blue-500 focus:outline-none">
+
+                        <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 text-white
+               transition hover:bg-blue-700">
+                            Search
+                        </button>
+                    </form>
                 </div>
 
                 <div class="overflow-hidden rounded-lg border bg-white shadow-sm">
@@ -138,19 +145,28 @@ const pagination = ref({
 const links = ref({})
 
 async function loadPermissions(page = 1) {
-    const data = await getPermissions(page)
+    const data = await getPermissions(page, search.value)
 
 
     permissions.value = data.data
     pagination.value = data.meta
     links.value = data.links
+
+    if (
+        data.meta.last_page > 0 &&
+        page > data.meta.last_page
+    ) {
+        return loadPermissions(
+            data.meta.last_page
+        )
+    }
 }
 
 function nextPage() {
     if (!pagination.value.current_page) return
 
     loadPermissions(
-        pagination.value.current_page + 1
+        pagination.value.current_page + 1, search.value
     )
 }
 
@@ -158,7 +174,7 @@ function previousPage() {
     if (!pagination.value.current_page) return
 
     loadPermissions(
-        pagination.value.current_page - 1
+        pagination.value.current_page - 1, search.value
     )
 }
 
@@ -170,8 +186,8 @@ function openEditModal(permission) {
 async function handleCreate(permissionData) {
     creatingPermission.value = true
     try {
-        loading.value = true
         await createPermission(permissionData)
+        loading.value = true
         showCreateModal.value = false
         await loadPermissions(pagination.value.current_page)
     } finally {
@@ -184,8 +200,8 @@ async function handleCreate(permissionData) {
 async function handleEdit(permissionData) {
     editingPermission.value = true
     try {
-        loading.value = true
         await updatePermission(permissionData.id, permissionData)
+        loading.value = true
         showEditModal.value = false
         await loadPermissions(pagination.value.current_page)
     } finally {
@@ -205,8 +221,8 @@ async function handleDelete(permission) {
     deletingPermission.value = true
 
     try {
-        loading.value = true
         await deletePermission(permission.id)
+        loading.value = true
         await loadPermissions(pagination.value.current_page)
     } catch (err) {
         alert(err.response?.data?.message ?? 'Delete failed.')

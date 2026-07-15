@@ -28,6 +28,11 @@ class PermissionController extends Controller
         return PermissionResource::collection($permissions);
     }
 
+    public function all(): AnonymousResourceCollection
+    {
+        return PermissionResource::collection(Permission::orderBy('name')->get());
+    }
+
     public function show(Permission $permission): PermissionResource
     {
         $permission->load('roles');

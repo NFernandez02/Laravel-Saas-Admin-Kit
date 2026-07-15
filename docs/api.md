@@ -526,7 +526,7 @@ Success Response (200 OK)
 ```
 ## Permissions
 
-### Get Permissions
+### Get Permissions (Paginated)
 
 GET /admin/permissions
 
@@ -576,6 +576,31 @@ Success Response (200 OK)
   }
 }
 ```
+
+### Get All Permission
+
+GET /admin/permissions/all
+
+**Permissions**
+
+permissions.view
+
+Success Response (200 OK)
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "users.view",
+      "roles_count": 1,
+      "roles": [
+        "admin"
+      ]
+    }
+  ]
+}
+```
+
 ### Get Permission
 
 GET /admin/permissions/{permission}

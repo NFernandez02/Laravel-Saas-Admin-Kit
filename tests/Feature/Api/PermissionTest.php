@@ -40,6 +40,16 @@ test('authorized user can access permissions', function () {
     $response->assertStatus(200);
 });
 
+test('authorized user can access all permissions', function () {
+    $adminRole = Role::where('name', 'admin')->firstOrFail();
+    $user = User::factory()->create([
+        'role_id' => $adminRole->id,
+    ]);
+    Sanctum::actingAs($user);
+    $response = $this->getJson('/api/v1/admin/permissions/all');
+    $response->assertStatus(200);
+});
+
 test('authorized user can create permissions', function () {
 
     $adminRole = Role::where('name', 'admin')->firstOrFail();

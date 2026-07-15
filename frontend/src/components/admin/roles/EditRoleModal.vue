@@ -26,7 +26,7 @@
                     <label class="mb-1 block text-sm">
                         Permissions
                     </label>
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid max-h-64 grid-cols-2 gap-3 overflow-y-auto rounded border p-3">
 
                         <label v-for="permission in permissions" :key="permission.id"
                             class="flex items-center gap-2 rounded border p-3 hover:bg-gray-50">
