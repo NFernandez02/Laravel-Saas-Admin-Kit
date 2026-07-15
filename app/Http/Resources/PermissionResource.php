@@ -22,7 +22,13 @@ class PermissionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'roles_count' => $this->whenCounted('roles'),
-            'roles' => $this->whenLoaded('roles', fn () => $this->roles->pluck('name')),
+            'roles' => $this->whenLoaded(
+                'roles', 
+                fn () => $this->roles->map(fn ($role) => [
+                    'id' => $role->id,
+                    'name' => $role->name,
+                ])
+            ),
         ];
     }
 }

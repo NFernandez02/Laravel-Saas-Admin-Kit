@@ -1,111 +1,114 @@
 <template>
-    <div class="space-y-6">
+    <AdminLayout>
+        <div class="space-y-6">
 
-        <div v-if="loading">
-            Loading roles...
-        </div>
+            <div v-if="loading">
+                Loading roles...
+            </div>
 
-        <template v-else>
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold">
-                        Role Management
-                    </h1>
+            <template v-else>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold">
+                            Role Management
+                        </h1>
 
-                    <p class="text-gray-500">
-                        Manage user roles.
-                    </p>
+                        <p class="text-gray-500">
+                            Manage user roles.
+                        </p>
+                    </div>
+
+                    <button @click="showCreateModal = true" class="rounded-lg bg-blue-600 px-4 py-2 text-white
+           transition hover:bg-blue-700">
+                        Create Role
+                    </button>
                 </div>
 
-                <button @click="showCreateModal = true" class="rounded-lg bg-blue-600 px-4 py-2 text-white
-           transition hover:bg-blue-700">
-                    Create Role
-                </button>
-            </div>
+                <div class="rounded-lg border bg-white p-4 shadow-sm">
+                    <input v-model="search" type="text" placeholder="Search roles..."
+                        class="w-full rounded-lg border p-2">
+                </div>
 
-            <div class="rounded-lg border bg-white p-4 shadow-sm">
-                <input v-model="search" type="text" placeholder="Search roles..." class="w-full rounded-lg border p-2">
-            </div>
+                <div class="overflow-hidden rounded-lg border bg-white shadow-sm">
 
-            <div class="overflow-hidden rounded-lg border bg-white shadow-sm">
+                    <table class="min-w-full">
 
-                <table class="min-w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-4 text-left">
+                                    Name
+                                </th>
 
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="p-4 text-left">
-                                Name
-                            </th>
+                                <th class="p-4 text-left">
+                                    Users Count
+                                </th>
 
-                            <th class="p-4 text-left">
-                                Users Count
-                            </th>
+                                <th class="p-4 text-left">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
 
-                            <th class="p-4 text-left">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
+                        <tbody>
 
-                    <tbody>
+                            <tr v-for="role in roles" :key="role.id" class="border-t">
+                                <td class="p-4">
+                                    {{ role.name }}
+                                </td>
 
-                        <tr v-for="role in roles" :key="role.id" class="border-t">
-                            <td class="p-4">
-                                {{ role.name }}
-                            </td>
+                                <td class="p-4">
+                                    {{ role.users_count }}
+                                </td>
 
-                            <td class="p-4">
-                                {{ role.users_count }}
-                            </td>
+                                <td class="p-4 space-x-2">
 
-                            <td class="p-4 space-x-2">
-
-                                <button @click="openEditModal(role)" class="rounded-lg bg-amber-500 px-3 py-1.5 text-sm text-white
+                                    <button @click="openEditModal(role)" class="rounded-lg bg-amber-500 px-3 py-1.5 text-sm text-white
                                                 transition hover:bg-amber-600">
-                                    Edit
-                                </button>
+                                        Edit
+                                    </button>
 
-                                <button @click="handleDelete(role)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
+                                    <button @click="handleDelete(role)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
                                                 transition hover:bg-red-700">
-                                    Delete
-                                </button>
+                                        Delete
+                                    </button>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
 
-            </div>
+                </div>
 
-            <div class="flex justify-end gap-2">
-                <button @click="previousPage" :disabled="pagination?.current_page === 1" class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium
+                <div class="flex justify-end gap-2">
+                    <button @click="previousPage" :disabled="pagination?.current_page === 1" class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium
                             transition hover:bg-gray-100
                             disabled:cursor-not-allowed
                             disabled:opacity-50">
-                    Previous
-                </button>
-                <span class="rounded-lg border bg-gray-50 px-4 py-2 text-sm text-gray-600">
-                    Page {{ pagination.current_page }}
-                    of
-                    {{ pagination.last_page }}
-                </span>
-                <button @click="nextPage" :disabled="pagination?.current_page === pagination?.last_page" class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium
+                        Previous
+                    </button>
+                    <span class="rounded-lg border bg-gray-50 px-4 py-2 text-sm text-gray-600">
+                        Page {{ pagination.current_page }}
+                        of
+                        {{ pagination.last_page }}
+                    </span>
+                    <button @click="nextPage" :disabled="pagination?.current_page === pagination?.last_page" class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium
                             transition hover:bg-gray-100
                             disabled:cursor-not-allowed
                             disabled:opacity-50">
-                    Next
-                </button>
+                        Next
+                    </button>
 
-            </div>
-        </template>
+                </div>
+            </template>
 
-    </div>
-    <CreateRoleModal :show="showCreateModal" :permissions="permissions" :creating="creatingRole"
-        @close="showCreateModal = false" @created="handleCreate" />
-    <EditRoleModal :show="showEditModal" :permissions="permissions" :editing="editingRole" :role="selectedRole" 
-        @close="showEditModal = false" @updated="handleEdit"/>
+        </div>
+        <CreateRoleModal :show="showCreateModal" :permissions="permissions" :creating="creatingRole"
+            @close="showCreateModal = false" @created="handleCreate" />
+        <EditRoleModal :show="showEditModal" :permissions="permissions" :editing="editingRole" :role="selectedRole"
+            @close="showEditModal = false" @updated="handleEdit" />
+    </AdminLayout>
 </template>
 
 <script setup>
@@ -115,6 +118,7 @@ import EditUserModal from '../../components/admin/users/EditUserModal.vue'
 import { getPermissions } from '../../services/permissionManagementService.js'
 import CreateRoleModal from '../../components/admin/roles/CreateRoleModal.vue'
 import EditRoleModal from '../../components/admin/roles/EditRoleModal.vue'
+import AdminLayout from '../../layouts/AdminLayout.vue'
 
 const loading = ref(true)
 const roles = ref([])

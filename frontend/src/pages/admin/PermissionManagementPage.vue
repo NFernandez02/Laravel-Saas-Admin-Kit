@@ -3,29 +3,29 @@
         <div class="space-y-6">
 
             <div v-if="loading">
-                Loading users...
+                Loading permissions...
             </div>
 
             <template v-else>
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-3xl font-bold">
-                            User Management
+                            Permission Management
                         </h1>
 
                         <p class="text-gray-500">
-                            Manage system users.
+                            Manage role permissions.
                         </p>
                     </div>
 
                     <button @click="showCreateModal = true" class="rounded-lg bg-blue-600 px-4 py-2 text-white
            transition hover:bg-blue-700">
-                        Create User
+                        Create Permission
                     </button>
                 </div>
 
                 <div class="rounded-lg border bg-white p-4 shadow-sm">
-                    <input v-model="search" type="text" placeholder="Search users..."
+                    <input v-model="search" type="text" placeholder="Search permissions..."
                         class="w-full rounded-lg border p-2">
                 </div>
 
@@ -40,11 +40,7 @@
                                 </th>
 
                                 <th class="p-4 text-left">
-                                    Email
-                                </th>
-
-                                <th class="p-4 text-left">
-                                    Role
+                                    Roles Count
                                 </th>
 
                                 <th class="p-4 text-left">
@@ -55,27 +51,23 @@
 
                         <tbody>
 
-                            <tr v-for="user in users" :key="user.id" class="border-t">
+                            <tr v-for="permission in permissions" :key="permission.id" class="border-t">
                                 <td class="p-4">
-                                    {{ user.name }}
+                                    {{ permission.name }}
                                 </td>
 
                                 <td class="p-4">
-                                    {{ user.email }}
-                                </td>
-
-                                <td class="p-4">
-                                    {{ user.role.name }}
+                                    {{ permission.roles_count }}
                                 </td>
 
                                 <td class="p-4 space-x-2">
 
-                                    <button @click="openEditModal(user)" class="rounded-lg bg-amber-500 px-3 py-1.5 text-sm text-white
+                                    <button @click="openEditModal(permission)" class="rounded-lg bg-amber-500 px-3 py-1.5 text-sm text-white
                                                 transition hover:bg-amber-600">
                                         Edit
                                     </button>
 
-                                    <button @click="handleDelete(user)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
+                                    <button @click="handleDelete(permission)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
                                                 transition hover:bg-red-700">
                                         Delete
                                     </button>
@@ -112,34 +104,32 @@
             </template>
 
         </div>
-        <CreateUserModal :show="showCreateModal" :roles="roles" :creating="creatingUser"
-            @close="showCreateModal = false" @created="handleCreate" />
-        <EditUserModal :show="showEditModal" :roles="roles" :editing="editingUser" :user="selectedUser"
+        <CreatePermissionModal :show="showCreateModal" :creating="creatingPermission" @close="showCreateModal = false"
+            @created="handleCreate" />
+        <EditPermissionModal :show="showEditModal" :editing="editingPermission" :permission="selectedPermission"
             @close="showEditModal = false" @updated="handleEdit" />
     </AdminLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { createUser, deleteUser, getUsers, updateUser } from '../../services/userManagementService'
-import CreateUserModal from '../../components/admin/users/CreateUserModal.vue'
-import { getRoles } from '../../services/roleManagementService.js'
-import EditUserModal from '../../components/admin/users/EditUserModal.vue'
+import { createPermission, deletePermission, getPermissions, updatePermission } from '../../services/permissionManagementService.js'
+import CreatePermissionModal from '../../components/admin/permissions/CreatePermissionModal.vue'
+import EditPermissionModal from '../../components/admin/permissions/EditPermissionModal.vue'
 import AdminLayout from '../../layouts/AdminLayout.vue'
 
 const loading = ref(true)
-const users = ref([])
+const permissions = ref([])
 const search = ref('')
 
 const showCreateModal = ref(false)
-const roles = ref([])
-const creatingUser = ref(false)
+const creatingPermission = ref(false)
 
 const showEditModal = ref(false)
-const selectedUser = ref(null)
-const editingUser = ref(false)
+const selectedPermission = ref(null)
+const editingPermission = ref(false)
 
-const deletingUser = ref(false)
+const deletingPermission = ref(false)
 
 const pagination = ref({
     current_page: 1,
@@ -147,12 +137,11 @@ const pagination = ref({
 })
 const links = ref({})
 
-async function loadUsers(page = 1) {
-    const data = await getUsers(page)
+async function loadPermissions(page = 1) {
+    const data = await getPermissions(page)
 
-    console.log(data)
 
-    users.value = data.data
+    permissions.value = data.data
     pagination.value = data.meta
     links.value = data.links
 }
@@ -160,7 +149,7 @@ async function loadUsers(page = 1) {
 function nextPage() {
     if (!pagination.value.current_page) return
 
-    loadUsers(
+    loadPermissions(
         pagination.value.current_page + 1
     )
 }
@@ -168,68 +157,68 @@ function nextPage() {
 function previousPage() {
     if (!pagination.value.current_page) return
 
-    loadUsers(
+    loadPermissions(
         pagination.value.current_page - 1
     )
 }
 
-function openEditModal(user) {
-    selectedUser.value = user
+function openEditModal(permission) {
+    selectedPermission.value = permission
     showEditModal.value = true
 }
 
-async function handleCreate(userData) {
-    creatingUser.value = true
+async function handleCreate(permissionData) {
+    creatingPermission.value = true
     try {
         loading.value = true
-        await createUser(userData)
+        await createPermission(permissionData)
         showCreateModal.value = false
-        await loadUsers(pagination.value.current_page)
+        await loadPermissions(pagination.value.current_page)
     } finally {
         loading.value = false
-        creatingUser.value = false
+        creatingPermission.value = false
     }
 
 }
 
-async function handleEdit(userData) {
-    editingUser.value = true
+async function handleEdit(permissionData) {
+    editingPermission.value = true
     try {
         loading.value = true
-        await updateUser(userData.id, userData)
+        await updatePermission(permissionData.id, permissionData)
         showEditModal.value = false
-        await loadUsers(pagination.value.current_page)
+        await loadPermissions(pagination.value.current_page)
     } finally {
         loading.value = false
-        editingUser.value = false
+        editingPermission.value = false
     }
 }
 
-async function handleDelete(user) {
+async function handleDelete(permission) {
     const confirmed = confirm(
-        `Delete ${user.name}?`
+        `Delete ${permission.name}?`
     )
     if (!confirmed) {
         return
     }
 
-    deletingUser.value = true
+    deletingPermission.value = true
 
     try {
         loading.value = true
-        await deleteUser(user.id)
-        await loadUsers(pagination.value.current_page)
+        await deletePermission(permission.id)
+        await loadPermissions(pagination.value.current_page)
+    } catch (err) {
+        alert(err.response?.data?.message ?? 'Delete failed.')
     } finally {
-        deletingUser.value = false
+        deletingPermission.value = false
         loading.value = false
     }
 }
 
 onMounted(async () => {
     try {
-        await loadUsers()
-        const response = await getRoles()
-        roles.value = response.data
+        await loadPermissions()
     } finally {
         loading.value = false
     }

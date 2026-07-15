@@ -7,6 +7,7 @@ import { useAuthStore } from "../stores/authStore.js";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage.vue";
 import UserManagementPage from "../pages/admin/UserManagementPage.vue";
 import RoleManagementPage from "../pages/admin/RoleManagementPage.vue";
+import PermissionManagementPage from "../pages/admin/PermissionManagementPage.vue";
 
 const routes = [
     {
@@ -51,6 +52,13 @@ const routes = [
             adminOnly: true
         }
     },
+    {
+        path: '/admin/permissions',
+        component: PermissionManagementPage,
+        meta: {
+            adminOnly: true
+        }
+    }
 ]
 
 const router = createRouter({
