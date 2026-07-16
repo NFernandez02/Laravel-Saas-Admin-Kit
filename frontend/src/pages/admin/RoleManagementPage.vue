@@ -74,7 +74,7 @@
                                         Edit
                                     </button>
 
-                                    <button @click="handleDelete(role)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
+                                    <button @click="openDeleteModal(role)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
                                                 transition hover:bg-red-700">
                                         Delete
                                     </button>
@@ -115,6 +115,9 @@
             @close="showCreateModal = false" @created="handleCreate" />
         <EditRoleModal :show="showEditModal" :permissions="permissions" :editing="editingRole" :role="selectedRole"
             @close="showEditModal = false" @updated="handleEdit" />
+        <ConfirmModal :show="showDeleteModal" title="Delete Role" 
+        :message="`Are you sure you want to delete ${selectedRole?.name ?? ''}?`"
+        :loading="deletingRole" @cancel="showDeleteModal = false" @confirm="handleDelete"/>
     </AdminLayout>
 </template>
 
@@ -126,6 +129,7 @@ import { getAllPermissions } from '../../services/permissionManagementService.js
 import CreateRoleModal from '../../components/admin/roles/CreateRoleModal.vue'
 import EditRoleModal from '../../components/admin/roles/EditRoleModal.vue'
 import AdminLayout from '../../layouts/AdminLayout.vue'
+import ConfirmModal from '../../components/ConfirmModal.vue'
 
 const loading = ref(true)
 const roles = ref([])
@@ -140,6 +144,7 @@ const selectedRole = ref(null)
 const editingRole = ref(false)
 
 const deletingRole = ref(false)
+const showDeleteModal = ref(false)
 
 const pagination = ref({
     current_page: 1,
@@ -186,6 +191,11 @@ function openEditModal(role) {
     showEditModal.value = true
 }
 
+function openDeleteModal(role){
+    selectedRole.value = role
+    showDeleteModal.value = true
+}
+
 async function handleCreate(roleData) {
     creatingRole.value = true
     try {
@@ -214,12 +224,8 @@ async function handleEdit(roleData) {
 }
 
 async function handleDelete(role) {
-    const confirmed = confirm(
-        `Delete ${role.name}?`
-    )
-    if (!confirmed) {
-        return
-    }
+
+    if (!selectedRole.value) return
 
     deletingRole.value = true
 

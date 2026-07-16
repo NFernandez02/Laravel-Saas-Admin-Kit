@@ -82,7 +82,7 @@
                                         Edit
                                     </button>
 
-                                    <button @click="handleDelete(user)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
+                                    <button @click="openDeleteModal(user)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
                                                 transition hover:bg-red-700">
                                         Delete
                                     </button>
@@ -123,6 +123,9 @@
             @close="showCreateModal = false" @created="handleCreate" />
         <EditUserModal :show="showEditModal" :roles="roles" :editing="editingUser" :user="selectedUser"
             @close="showEditModal = false" @updated="handleEdit" />
+        <ConfirmModal :show="showDeleteModal" title="Delete User" 
+        :message="`Are you sure you want to delete ${selectedUser?.name ?? ''}?`"
+        :loading="deletingUser" @cancel="showDeleteModal = false" @confirm="handleDelete"/>
     </AdminLayout>
 </template>
 
@@ -133,6 +136,7 @@ import CreateUserModal from '../../components/admin/users/CreateUserModal.vue'
 import { getRoles } from '../../services/roleManagementService.js'
 import EditUserModal from '../../components/admin/users/EditUserModal.vue'
 import AdminLayout from '../../layouts/AdminLayout.vue'
+import ConfirmModal from '../../components/ConfirmModal.vue'
 
 const loading = ref(true)
 const users = ref([])
@@ -147,6 +151,7 @@ const selectedUser = ref(null)
 const editingUser = ref(false)
 
 const deletingUser = ref(false)
+const showDeleteModal = ref(false)
 
 const pagination = ref({
     current_page: 1,
@@ -194,6 +199,11 @@ function openEditModal(user) {
     showEditModal.value = true
 }
 
+function openDeleteModal(user){
+    selectedUser.value = user
+    showDeleteModal.value = true
+}
+
 async function handleCreate(userData) {
     creatingUser.value = true
     try {
@@ -222,12 +232,7 @@ async function handleEdit(userData) {
 }
 
 async function handleDelete(user) {
-    const confirmed = confirm(
-        `Delete ${user.name}?`
-    )
-    if (!confirmed) {
-        return
-    }
+    if(!selectedUser.value) return
 
     deletingUser.value = true
 

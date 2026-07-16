@@ -74,7 +74,7 @@
                                         Edit
                                     </button>
 
-                                    <button @click="handleDelete(permission)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
+                                    <button @click="openDeleteModal(permission)" class="rounded-lg bg-red-600 px-3 py-1.5 text-sm text-white
                                                 transition hover:bg-red-700">
                                         Delete
                                     </button>
@@ -115,6 +115,9 @@
             @created="handleCreate" />
         <EditPermissionModal :show="showEditModal" :editing="editingPermission" :permission="selectedPermission"
             @close="showEditModal = false" @updated="handleEdit" />
+        <ConfirmModal :show="showDeleteModal" title="Delete Permission" 
+        :message="`Are you sure you want to delete ${selectedPermission?.name ?? ''}?`"
+        :loading="deletingPermission" @cancel="showDeleteModal = false" @confirm="handleDelete"/>
     </AdminLayout>
 </template>
 
@@ -124,6 +127,7 @@ import { createPermission, deletePermission, getPermissions, updatePermission } 
 import CreatePermissionModal from '../../components/admin/permissions/CreatePermissionModal.vue'
 import EditPermissionModal from '../../components/admin/permissions/EditPermissionModal.vue'
 import AdminLayout from '../../layouts/AdminLayout.vue'
+import ConfirmModal from '../../components/ConfirmModal.vue'
 
 const loading = ref(true)
 const permissions = ref([])
@@ -137,6 +141,7 @@ const selectedPermission = ref(null)
 const editingPermission = ref(false)
 
 const deletingPermission = ref(false)
+const showDeleteModal = ref(false)
 
 const pagination = ref({
     current_page: 1,
@@ -183,6 +188,11 @@ function openEditModal(permission) {
     showEditModal.value = true
 }
 
+function openDeleteModal(permission){
+    selectedPermission.value = permission
+    showDeleteModal.value = true
+}
+
 async function handleCreate(permissionData) {
     creatingPermission.value = true
     try {
@@ -196,6 +206,7 @@ async function handleCreate(permissionData) {
     }
 
 }
+
 
 async function handleEdit(permissionData) {
     editingPermission.value = true
@@ -211,12 +222,7 @@ async function handleEdit(permissionData) {
 }
 
 async function handleDelete(permission) {
-    const confirmed = confirm(
-        `Delete ${permission.name}?`
-    )
-    if (!confirmed) {
-        return
-    }
+    if(!selectedPermission.value) return
 
     deletingPermission.value = true
 
