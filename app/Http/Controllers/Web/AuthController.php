@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\TwoFactor\ConfirmTwoFactorRequest;
 use App\Models\User;
 use App\Services\TwoFactorService;
 use Illuminate\Contracts\View\View;
@@ -71,11 +72,8 @@ class AuthController extends Controller
         return view('authentication.challenge');
     }
 
-    public function verify(Request $request): RedirectResponse
+    public function verify(ConfirmTwoFactorRequest $request): RedirectResponse
     {
-        $request->validate([
-            'code' => ['required', 'digits:6'],
-        ]);
         /** @var User $user */
         $user = User::findOrFail(session('2fa_user_id'));
         $code = $request->string('code')->toString();

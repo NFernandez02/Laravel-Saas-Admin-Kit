@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profiles\UpdateProfileRequest;
+use App\Http\Requests\TwoFactor\ConfirmTwoFactorRequest;
 use App\Models\User;
 use App\Services\ProfileService;
 use App\Services\TwoFactorService;
@@ -60,7 +61,7 @@ class ProfileController extends Controller
         return redirect()->route('users.profile.index');
     }
 
-    public function confirm(Request $request): RedirectResponse
+    public function confirm(ConfirmTwoFactorRequest $request): RedirectResponse
     {
         /** @var User $user */
         $user = $request->user();
@@ -72,6 +73,7 @@ class ProfileController extends Controller
         if (! is_string($secret)) {
             abort(400, 'Invalid 2FA secret.');
         }
+
         $code = $request->string('code')->toString();
         $valid = $this->twoFactorService->verify($secret, $code);
 

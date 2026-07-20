@@ -56,6 +56,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // ProfileController
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
+    Route::post('/profile/two-factor/setup', [ProfileController::class, 'setup2FA']);
+    Route::post('/profile/two-factor/confirm', [ProfileController::class, 'confirm2FA']);
+    Route::post('/profile/two-factor/disable', [ProfileController::class, 'delete2FA']);
 
     // PasswordController
     Route::put('/password', [PasswordController::class, 'update']);

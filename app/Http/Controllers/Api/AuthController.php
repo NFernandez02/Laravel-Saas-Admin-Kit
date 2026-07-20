@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\TwoFactorAuthRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\TwoFactorService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -76,12 +76,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function verify(Request $request): JsonResponse
+    public function verify(TwoFactorAuthRequest $request): JsonResponse
     {
-        $request->validate([
-            'challenge_token' => ['required', 'string'],
-            'code' => ['required', 'digits:6'],
-        ]);
+        $request->validated();
         $challengeToken = $request->string('challenge_token')->toString();
         $userId = Cache::get("2fa:{$challengeToken}");
         if (! $userId) {

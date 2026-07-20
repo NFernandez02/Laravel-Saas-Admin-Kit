@@ -22,7 +22,10 @@ class ProfileResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'avatar' => $this->avatar,
+            'avatar_url' => $this->avatar ? asset('storage/'.$this->avatar) : null,
             'bio' => $this->bio,
+            'two_factor_enabled' => $this->two_factor_enabled,
+            'two_factor_setup_pending' => $this->two_factor_secret !== null && ! $this->two_factor_enabled,
         ];
     }
 }

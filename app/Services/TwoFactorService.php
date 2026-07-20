@@ -20,7 +20,7 @@ class TwoFactorService
             ->verifyKey($secret, $code);
     }
 
-    public function generateQrCode(User $user): mixed
+    public function generateQrCode(User $user): string
     {
         if (! $user->two_factor_secret) {
             abort(400, '2FA secret missing.');
@@ -49,6 +49,7 @@ class TwoFactorService
             abort(500, 'Failed to generate QR code.');
         }
 
-        return $qrCode;
+        /** @phpstan-ignore-next-line */
+        return (string) $qrCode;
     }
 }

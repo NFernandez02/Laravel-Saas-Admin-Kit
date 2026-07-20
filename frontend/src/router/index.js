@@ -9,6 +9,7 @@ import UserManagementPage from "../pages/admin/UserManagementPage.vue";
 import RoleManagementPage from "../pages/admin/RoleManagementPage.vue";
 import PermissionManagementPage from "../pages/admin/PermissionManagementPage.vue";
 import AuditLogManagementPage from "../pages/admin/AuditLogManagementPage.vue";
+import ProfilePage from "../pages/user/ProfilePage.vue";
 
 const routes = [
     {
@@ -30,6 +31,13 @@ const routes = [
         component: ChallengePage,
         meta: {
             requiresChallenge: true
+        }
+    },
+    {
+        path: '/profile',
+        component: ProfilePage,
+        meta: {
+            requiresAuth: true
         }
     },
     {
